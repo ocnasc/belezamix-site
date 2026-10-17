@@ -62,13 +62,26 @@ test("C18 páginas de loja com fachada, endereço, horários, ações e título"
     const html = completo.html(url);
     assert.equal(texto(trecho(html, "title")).trim(), titulo);
     const main = trecho(html, "main");
-    assert.ok(tags(main, "img").some((i) => i.class?.includes("foto--fachada") && i.alt === alt && i.src === "/fotos/fachada-teste.webp"), url);
+    assert.ok(tags(main, "img").some((i) => i.class?.includes("foto--fachada") && i.alt === alt && i.src === `/fotos${url.slice("/lojas".length)}fachada-teste.webp`), url);
     const t = texto(main);
     assert.ok(t.includes(endereco), url);
     for (const h of horarios) assert.ok(t.includes(h), `${url} ${h}`);
     assert.equal(botoesWhats(main).length, 1, url);
     assert.equal(tags(main, "a").filter((a) => a.class === "link-mapa").length, 1, url);
   }
+});
+
+test("C18 título e descrição da loja não escapam duas vezes", async () => {
+  const c = clonar(COMPLETO);
+  c.lojas[0].bairro = "Vila D'Ávila & Cia";
+  c.lojas[0].nome = "Belezamix D'Ávila & Cia";
+  const r = await gerar(c);
+  const html = r.html("/lojas/anhangabau/");
+  assert.equal(texto(trecho(html, "title")).trim(), "Cosméticos em Vila D'Ávila & Cia, Jundiaí | Belezamix");
+  assert.equal(meta(html, "og:title"), "Cosméticos em Vila D'Ávila & Cia, Jundiaí | Belezamix");
+  assert.ok(meta(html, "description").startsWith("Belezamix D'Ávila & Cia: "));
+  assert.equal(texto(trecho(html, "h1")).trim(), "Belezamix D'Ávila & Cia");
+  assert.doesNotMatch(html, /&amp;(amp|#39);/);
 });
 
 test("C19 um JSON-LD Store por página de loja, igual ao conteúdo", () => {
@@ -84,7 +97,7 @@ test("C19 um JSON-LD Store por página de loja, igual ao conteúdo", () => {
       { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "08:00", closes: "17:00" },
       { "@type": "OpeningHoursSpecification", dayOfWeek: ["Saturday"], opens: "08:00", closes: "12:00" },
     ],
-    image: `${URL_PREVIA}/fotos/fachada-teste.webp`,
+    image: `${URL_PREVIA}/fotos/anhangabau/fachada-teste.webp`,
     sameAs: ["https://www.instagram.com/belezamixjundiai"],
   };
   const esperadoEloy = {
@@ -99,7 +112,7 @@ test("C19 um JSON-LD Store por página de loja, igual ao conteúdo", () => {
       { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "08:00", closes: "19:00" },
       { "@type": "OpeningHoursSpecification", dayOfWeek: ["Saturday"], opens: "09:00", closes: "12:00" },
     ],
-    image: `${URL_PREVIA}/fotos/fachada-teste.webp`,
+    image: `${URL_PREVIA}/fotos/eloy-chaves/fachada-teste.webp`,
     sameAs: ["https://www.instagram.com/belezamixjundiai"],
   };
   for (const [url, ldEsperado] of [["/lojas/anhangabau/", esperado], ["/lojas/eloy-chaves/", esperadoEloy]]) {
