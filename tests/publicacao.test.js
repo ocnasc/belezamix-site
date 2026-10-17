@@ -2,8 +2,7 @@ import { test, before } from "node:test";
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
-import { DOMINIO } from "../lib/build.js";
-import { COMPLETO, REAL, ehInterno, gerar, meta, referencias, tags } from "./helpers.js";
+import { COMPLETO, REAL, URL_PREVIA, ehInterno, gerar, meta, referencias, tags } from "./helpers.js";
 
 let previa;
 let lancamento;
@@ -26,6 +25,7 @@ test("C27 prévia por padrão: noindex, sem sitemap e links internos a partir da
       const html = r.html(url);
       assert.ok(noindex(html), url);
       for (const ref of referencias(html).filter(ehInterno)) assert.ok(ref.startsWith("/"), `${url}: ${ref}`);
+      for (const ref of referencias(html)) assert.ok(!ref.startsWith(URL_PREVIA), `${url}: link absoluto para o próprio site ${ref}`);
     }
   }
 });
@@ -36,8 +36,8 @@ test("C28 lançamento: indexável, canônica no domínio e sitemap exato", () =>
     const html = lancamento.html(url);
     assert.ok(!noindex(html), url);
     const canonical = tags(html, "link").find((l) => l.rel === "canonical")?.href;
-    assert.equal(canonical, DOMINIO + url);
-    assert.equal(meta(html, "og:url"), DOMINIO + url);
+    assert.equal(canonical, "https://belezamixjundiai.com.br" + url);
+    assert.equal(meta(html, "og:url"), "https://belezamixjundiai.com.br" + url);
     canonicas.push(canonical);
   }
   const sitemap = lancamento.html("/sitemap.xml");

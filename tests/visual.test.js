@@ -40,6 +40,13 @@ test("C11 [navegador] primeira tela da Início em 360×640", async () => {
     assert.ok(caixa, `${s} não está visível`);
     assert.ok(caixa.y >= 0 && caixa.y + caixa.height <= 640, `${s}: y=${caixa.y} h=${caixa.height} passa de 640`);
   }
+  const textoDe = async (s) => (await p.locator(s).first().innerText()).replace(/\s+/g, " ").trim();
+  assert.equal(await textoDe('[aria-labelledby="loja-anhangabau"] h2'), "Anhangabaú");
+  assert.equal(await textoDe('[aria-labelledby="loja-eloy-chaves"] h2'), "Eloy Chaves");
+  assert.equal(await textoDe('[aria-labelledby="loja-anhangabau"] .loja__info'), "Av. Jundiaí, 376 Seg–Sex 8h–17h · Sáb 8h–12h");
+  assert.equal(await textoDe('[aria-labelledby="loja-eloy-chaves"] .loja__info'), "Av. Benedicto Castilho de Andrade, 558 Seg–Sex 8h–19h · Sáb 9h–12h");
+  assert.equal(await textoDe('[aria-labelledby="loja-anhangabau"] .btn-whats'), "Chamar no WhatsApp");
+  assert.equal(await textoDe('[aria-labelledby="loja-anhangabau"] .link-mapa'), "Como chegar");
   assert.equal((await p.locator(".topo h1").textContent()).trim(), "Tudo para unhas, cabelo e maquiagem, perto de você.");
   assert.equal((await p.locator(".selo").textContent()).trim(), "Há 20 anos em Jundiaí");
   await p.close();
@@ -48,16 +55,18 @@ test("C11 [navegador] primeira tela da Início em 360×640", async () => {
 test("C17 [navegador] WhatsApp antes do Como chegar e com área maior, em toda página", async () => {
   await preparar();
   for (const url of paginas) {
-    const p = await abrir(url);
-    const blocos = await p.locator("section.loja").all();
-    assert.ok(blocos.length > 0, url);
-    for (const b of blocos) {
-      const w = await b.locator(".btn-whats").boundingBox();
-      const m = await b.locator(".link-mapa").boundingBox();
-      assert.ok(w.y < m.y, `${url}: WhatsApp (y=${w.y}) depois do Como chegar (y=${m.y})`);
-      assert.ok(w.width * w.height > m.width * m.height, `${url}: WhatsApp não é maior que Como chegar`);
+    for (const largura of [360, 1280]) {
+      const p = await abrir(url, largura, 800);
+      const blocos = await p.locator("section.loja").all();
+      assert.ok(blocos.length > 0, url);
+      for (const b of blocos) {
+        const w = await b.locator(".btn-whats").boundingBox();
+        const m = await b.locator(".link-mapa").boundingBox();
+        assert.ok(w.y < m.y, `${url} @${largura}: WhatsApp (y=${w.y}) depois do Como chegar (y=${m.y})`);
+        assert.ok(w.width * w.height > m.width * m.height, `${url} @${largura}: WhatsApp não é maior que Como chegar`);
+      }
+      await p.close();
     }
-    await p.close();
   }
 });
 

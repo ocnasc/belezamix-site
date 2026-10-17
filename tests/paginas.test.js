@@ -87,13 +87,25 @@ test("C19 um JSON-LD Store por página de loja, igual ao conteúdo", () => {
     image: `${URL_PREVIA}/fotos/fachada-teste.webp`,
     sameAs: ["https://www.instagram.com/belezamixjundiai"],
   };
-  for (const url of ["/lojas/anhangabau/", "/lojas/eloy-chaves/"]) {
+  const esperadoEloy = {
+    "@context": "https://schema.org",
+    "@type": "Store",
+    name: "Belezamix Eloy Chaves",
+    url: `${URL_PREVIA}/lojas/eloy-chaves/`,
+    telephone: "+55 11 4521-0000",
+    address: { "@type": "PostalAddress", streetAddress: "Av. Benedicto Castilho de Andrade, 558", addressLocality: "Jundiaí", addressRegion: "SP", postalCode: "13212-070", addressCountry: "BR" },
+    geo: { "@type": "GeoCoordinates", latitude: -23.2, longitude: -46.9 },
+    openingHoursSpecification: [
+      { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "08:00", closes: "19:00" },
+      { "@type": "OpeningHoursSpecification", dayOfWeek: ["Saturday"], opens: "09:00", closes: "12:00" },
+    ],
+    image: `${URL_PREVIA}/fotos/fachada-teste.webp`,
+    sameAs: ["https://www.instagram.com/belezamixjundiai"],
+  };
+  for (const [url, ldEsperado] of [["/lojas/anhangabau/", esperado], ["/lojas/eloy-chaves/", esperadoEloy]]) {
     const blocos = [...completo.html(url).matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)];
     assert.equal(blocos.length, 1, url);
-    const ld = JSON.parse(blocos[0][1]);
-    assert.equal(ld["@type"], "Store");
-    if (url === "/lojas/anhangabau/") assert.deepEqual(ld, esperado);
-    else assert.equal(ld.telephone, "+55 11 4521-0000");
+    assert.deepEqual(JSON.parse(blocos[0][1]), ldEsperado, url);
   }
   for (const url of ["/", "/marcas/"]) assert.ok(!completo.html(url).includes("application/ld+json"), url);
 });

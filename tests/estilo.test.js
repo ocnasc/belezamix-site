@@ -13,6 +13,12 @@ test("C33 só os tokens de cor e as fontes Nunito/Nunito Sans aprovadas", () => 
   assert.ok(cores.length > 0);
   for (const c of cores) assert.ok([...TOKENS, HOVER_BOTAO].includes(c), `cor fora dos tokens: ${c}`);
   assert.doesNotMatch(CSS, /\b(rgba?|hsla?|hwb|lab|lch|oklch|color-mix)\(/, "cor fora de hex");
+  const valores = [...CSS.matchAll(/(?:^|[;{\s])(?:color|background(?:-color)?|border(?:-[a-z]+)?|outline(?:-color)?|fill|stroke)\s*:\s*([^;}]+)/g)].map((m) => m[1]);
+  assert.ok(valores.length > 0);
+  for (const v of valores) {
+    const semPermitidos = v.replace(/var\(--[\w-]+\)|#[0-9a-fA-F]{3,8}|currentColor|\b(none|solid|dashed|transparent|inherit|\d+(\.\d+)?(px|%)?)\b/g, "");
+    assert.doesNotMatch(semPermitidos, /[a-z]{3,}/i, `cor nomeada em "${v.trim()}"`);
+  }
   const hover = [...CSS.matchAll(/var\(--brand-hover\)/g)];
   assert.equal(hover.length, 1, "--brand-hover só no hover do botão");
   assert.match(CSS, /\.btn-whats:hover \{ background: var\(--brand-hover\); \}/);

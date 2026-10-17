@@ -42,6 +42,10 @@ test("C2 conteudo.json traz só o que as fontes informam", () => {
   const ausentesNegocio = ["anoFundacao", "categorias", "formasPagamento", "retirada", "entrega", "listaVip"];
   for (const loja of REAL.lojas) for (const c of ausentesLoja) assert.ok(!(c in loja), `${loja.slug}.${c} deveria estar ausente`);
   for (const c of ausentesNegocio) assert.ok(!(c in REAL.negocio), `negocio.${c} deveria estar ausente`);
+  const chavesLoja = ["slug", "nome", "nomeCurto", "bairro", "logradouro", "numero", "cep", "cidade", "uf", "placeId", "horarios", "mensagemWhatsapp"];
+  for (const loja of REAL.lojas) assert.deepEqual(Object.keys(loja).sort(), [...chavesLoja].sort(), loja.slug);
+  assert.deepEqual([a.nomeCurto, a.mensagemWhatsapp], ["Anhangabaú", "Olá! Vim pelo site, loja Anhangabaú"]);
+  assert.deepEqual([e.nomeCurto, e.mensagemWhatsapp], ["Eloy Chaves", "Olá! Vim pelo site, loja Eloy Chaves"]);
 });
 
 test("C3 prévia com obrigatório ausente sai com 0 e mostra [PENDENTE]", async () => {
@@ -54,8 +58,11 @@ test("C3 prévia com obrigatório ausente sai com 0 e mostra [PENDENTE]", async 
 });
 
 test("C4 lançamento recusa cada obrigatório ausente com a linha <nome>: <campo>", async () => {
-  assert.equal(OBRIGATORIOS_NEGOCIO.length, 3);
-  assert.equal(OBRIGATORIOS_LOJA.length, 17);
+  assert.deepEqual(OBRIGATORIOS_NEGOCIO, ["nome", "anoFundacao", "instagram"]);
+  assert.deepEqual([...OBRIGATORIOS_LOJA].sort(), [
+    "slug", "nome", "nomeCurto", "bairro", "logradouro", "numero", "cep", "cidade", "uf", "latitude", "longitude",
+    "placeId", "horarios", "telefone", "whatsapp", "mensagemWhatsapp", "fotoFachada",
+  ].sort());
   for (const campo of OBRIGATORIOS_NEGOCIO) {
     const c = clonar(COMPLETO);
     delete c.negocio[campo];
@@ -81,7 +88,7 @@ test("C5 lançamento recusado não escreve nenhum .html", async () => {
 
 for (const modo of ["previa", "lancamento"]) {
   test(`C6 telefone ou whatsapp fora do formato recusa o build (${modo})`, async () => {
-    for (const [campo, valor] of [["whatsapp", "11999990000"], ["telefone", "55 11 99999-0000"], ["whatsapp", "551199"]]) {
+    for (const [campo, valor] of [["whatsapp", "11999990000"], ["telefone", "55 11 99999-0000"], ["whatsapp", "551199"], ["telefone", "55119999900001"]]) {
       const c = clonar(COMPLETO);
       c.lojas[0][campo] = valor;
       const r = await gerar(c, { modo });
@@ -101,18 +108,22 @@ for (const modo of ["previa", "lancamento"]) {
   });
 
   test(`C8 foto inexistente ou sem .webp recusa o build (${modo})`, async () => {
+    // why: os casos "sem .webp" usam um arquivo que existe, para a recusa vir da extensão e não da ausência
     const casos = [
-      ["fotoFachada", (l) => { l.fotoFachada.arquivo = "tests/fixtures/fachada-teste.jpg"; }],
-      ["fotoFachada", (l) => { l.fotoFachada.arquivo = "tests/fixtures/nao-existe.webp"; }],
-      ["fotos[0]", (l) => { l.fotos[0].arquivo = "tests/fixtures/nao-existe.webp"; }],
-      ["fotos[0]", (l) => { l.fotos[0].arquivo = "tests/fixtures/interior.png"; }],
+      ["fotoFachada", "não é .webp", (l) => { l.fotoFachada.arquivo = "conteudo/logo-belezamix.png"; }],
+      ["fotoFachada", "não existe", (l) => { l.fotoFachada.arquivo = "tests/fixtures/nao-existe.webp"; }],
+      ["fotos[0]", "não existe", (l) => { l.fotos[0].arquivo = "tests/fixtures/nao-existe.webp"; }],
+      ["fotos[0]", "não é .webp", (l) => { l.fotos[0].arquivo = "conteudo/logo-belezamix.png"; }],
     ];
-    for (const [campo, mudar] of casos) {
+    for (const [campo, motivo, mudar] of casos) {
       const c = clonar(COMPLETO);
       mudar(c.lojas[0]);
       const r = await gerar(c, { modo });
       assert.notEqual(r.codigo, 0, campo);
-      assert.ok(r.linhas.some((l) => l.startsWith(`Belezamix (Anhangabaú): ${campo} inválido`)), r.linhas.join("\n"));
+      assert.ok(
+        r.linhas.some((l) => l.startsWith(`Belezamix (Anhangabaú): ${campo} inválido`) && l.includes(motivo)),
+        `${campo} (${motivo}): ${r.linhas.join("\n")}`,
+      );
     }
   });
 }
