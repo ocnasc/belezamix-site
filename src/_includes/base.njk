@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ titulo }}</title>
+<meta name="description" content="{{ descricao or site.descricao }}">
+{% if site.modo == "lancamento" %}<link rel="canonical" href="{{ site.urlBase }}{{ page.url }}">{% else %}<meta name="robots" content="noindex">{% endif %}
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="{{ titulo }}">
+<meta property="og:description" content="{{ descricao or site.descricao }}">
+<meta property="og:url" content="{{ site.urlBase }}{{ page.url }}">
+<meta property="og:image" content="{{ site.urlBase }}/assets/logo-belezamix.png">
+<link rel="preload" href="/assets/fontes/nunito-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/site.css">
+{% if jsonld %}<script type="application/ld+json">{{ jsonld | safe }}</script>{% endif %}
+</head>
+<body>
+<header class="topo">
+  <div class="topo__inner">
+    <div class="topo__linha">
+      <a href="/" class="topo__marca"><img class="topo__logo" src="/assets/logo-belezamix.png" alt="{{ site.negocio.nome }} Cosméticos, página inicial" width="88" height="88"></a>
+      {% if mostrarSelo %}<span class="selo">{{ site.negocio.selo }}</span>{% endif %}
+    </div>
+    <h1>{{ h1 }}</h1>
+  </div>
+</header>
+
+<main>
+{{ content | safe }}
+</main>
+
+<footer class="rodape">
+  <div class="rodape__inner">
+    <nav aria-label="Páginas do site">
+      <h2>Páginas</h2>
+      <ul class="rodape__menu">
+        {% for item in site.menu %}<li><a href="{{ item.url }}"{% if item.url == page.url %} aria-current="page"{% endif %}>{{ item.titulo }}</a></li>{% endfor %}
+      </ul>
+    </nav>
+    {% for loja in site.lojas %}
+    <div class="rodape__loja">
+      <h2>{{ loja.nome }}</h2>
+      <p>{{ loja.enderecoCompleto }}<br>{{ loja.telefoneExibido }}</p>
+    </div>
+    {% endfor %}
+    <div>
+      <h2>Instagram</h2>
+      {% if site.negocio.instagram %}<a href="https://www.instagram.com/{{ site.negocio.instagram }}">@{{ site.negocio.instagram }}</a>{% else %}{{ site.negocio.instagramPendente }}{% endif %}
+    </div>
+  </div>
+</footer>
+</body>
+</html>

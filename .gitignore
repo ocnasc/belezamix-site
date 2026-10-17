@@ -20,3 +20,6 @@ Thumbs.db
 
 # Scratch de sessão do agente (processo, não documentação do projeto)
 HANDOFF.md
+
+# Saída do build
+_site/

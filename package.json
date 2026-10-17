@@ -1,0 +1,22 @@
+{
+  "name": "belezamix-site",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "build": "node scripts/build.js",
+    "test": "node --test \"tests/**/*.test.js\"",
+    "test:ci": "node --test --test-skip-pattern=navegador \"tests/**/*.test.js\""
+  },
+  "dependencies": {
+    "@11ty/eleventy": "3.1.7",
+    "@fontsource/nunito": "5.3.0",
+    "@fontsource/nunito-sans": "5.3.0",
+    "@phosphor-icons/core": "2.1.1"
+  },
+  "devDependencies": {
+    "playwright-core": "1.64.1"
+  }
+}
