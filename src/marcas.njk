@@ -1,0 +1,17 @@
+---
+layout: base.njk
+permalink: /marcas/
+titulo: Marcas de cosméticos em Jundiaí | Belezamix
+h1: Marcas e categorias
+---
+{% from "cartao-loja.njk" import cartaoLoja %}
+<div class="pagina">
+  {% for c in site.categorias %}
+  <section class="bloco">
+    <h2>{{ c.nome }}</h2>
+    <ul class="marcas">{% for m in c.marcas %}<li>{{ m }}</li>{% endfor %}</ul>
+  </section>
+  {% endfor %}
+  <h2 class="titulo-secao">Fale com uma loja</h2>
+  <div class="lojas lojas--inline">{% for loja in site.lojas %}{{ cartaoLoja(loja, 3) }}{% endfor %}</div>
+</div>

@@ -1,0 +1,29 @@
+---
+layout: base.njk
+permalink: /como-comprar/
+titulo: Como comprar em Jundiaí | Belezamix
+h1: Como comprar
+---
+{% from "cartao-loja.njk" import cartaoLoja %}
+<div class="pagina">
+  {% if site.negocio.retirada %}
+  <section class="bloco" id="retirada">
+    <h2>Retirada</h2>
+    <p>{{ site.negocio.retirada }}</p>
+  </section>
+  {% endif %}
+  {% if site.negocio.entrega %}
+  <section class="bloco" id="entrega">
+    <h2>Entrega</h2>
+    <p>{{ site.negocio.entrega }}</p>
+  </section>
+  {% endif %}
+  {% if site.negocio.formasPagamento.length %}
+  <section class="bloco" id="pagamento">
+    <h2>Formas de pagamento</h2>
+    <ul>{% for f in site.negocio.formasPagamento %}<li>{{ f }}</li>{% endfor %}</ul>
+  </section>
+  {% endif %}
+  <h2 class="titulo-secao">Fale com uma loja</h2>
+  <div class="lojas lojas--inline">{% for loja in site.lojas %}{{ cartaoLoja(loja, 3) }}{% endfor %}</div>
+</div>

@@ -1,0 +1,10 @@
+---
+layout: base.njk
+titulo: Belezamix Cosméticos em Jundiaí
+h1: Tudo para unhas, cabelo e maquiagem, perto de você.
+mostrarSelo: true
+---
+{% from "cartao-loja.njk" import cartaoLoja %}
+<div class="lojas" aria-label="Nossas lojas">
+  {% for loja in site.lojas %}{{ cartaoLoja(loja) }}{% endfor %}
+</div>

@@ -1,0 +1,23 @@
+---
+layout: base.njk
+permalink: /profissionais/
+titulo: Para profissionais da beleza em Jundiaí | Belezamix
+h1: Para profissionais
+---
+{% from "cartao-loja.njk" import cartaoLoja %}
+<div class="pagina">
+  {% for c in site.categoriasProfissionais %}
+  <section class="bloco">
+    <h2>{{ c.nome }}</h2>
+    <ul class="marcas">{% for m in c.marcas %}<li>{{ m }}</li>{% endfor %}</ul>
+  </section>
+  {% endfor %}
+  {% if site.negocio.listaVip %}
+  <section class="bloco">
+    <h2>Lista VIP</h2>
+    <p><a class="link-destaque" href="{{ site.negocio.listaVip }}">Entrar na lista VIP no WhatsApp</a></p>
+  </section>
+  {% endif %}
+  <h2 class="titulo-secao">Fale com uma loja</h2>
+  <div class="lojas lojas--inline">{% for loja in site.lojas %}{{ cartaoLoja(loja, 3) }}{% endfor %}</div>
+</div>

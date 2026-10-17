@@ -1,0 +1,89 @@
+@font-face { font-family: "Nunito"; font-weight: 700; font-style: normal; font-display: swap; src: url("/assets/fontes/nunito-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "Nunito"; font-weight: 800; font-style: normal; font-display: swap; src: url("/assets/fontes/nunito-latin-800-normal.woff2") format("woff2"); }
+@font-face { font-family: "Nunito Sans"; font-weight: 400; font-style: normal; font-display: swap; src: url("/assets/fontes/nunito-sans-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Nunito Sans"; font-weight: 600; font-style: normal; font-display: swap; src: url("/assets/fontes/nunito-sans-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Nunito Sans"; font-weight: 700; font-style: normal; font-display: swap; src: url("/assets/fontes/nunito-sans-latin-700-normal.woff2") format("woff2"); }
+
+:root {
+  --brand: #EF018D;       /* invariant: igual ao fundo do logo, para o PNG não mostrar borda */
+  --on-brand: #FFFFFF;    /* invariant: só texto >=24px ou >=18.66px bold (4,15:1) */
+  --brand-ink: #B5006A;   /* invariant: >=4.5:1 no branco (6,62) e no fundo (6,01) */
+  --brand-tint: #FFF0F7;
+  --ink: #1A1A1A;
+  --muted: #5C5560;       /* invariant: >=4.5:1 no branco (7,18) e no fundo (6,52) */
+  --surface: #FFFFFF;
+  --brand-hover: #D9007F;
+  --radius: 16px;
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-6: 24px; --space-8: 32px;
+  --font-heading: "Nunito", system-ui, sans-serif;
+  --font-body: "Nunito Sans", system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--brand-tint); color: var(--ink); font: 400 16px/1.5 var(--font-body); }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--brand-ink); outline-offset: 3px; }
+img { max-width: 100%; }
+
+.topo { background: var(--brand); color: var(--on-brand); padding: var(--space-4) var(--space-4) var(--space-6); }
+.topo__inner, .lojas, .pagina, .rodape__inner { max-width: 1080px; margin: 0 auto; }
+.topo__linha { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
+.topo__marca { display: block; border-radius: 8px; }
+.topo__logo { width: 88px; height: 88px; display: block; margin: -8px 0 -8px -12px; }
+.topo :focus-visible { outline-color: var(--on-brand); }
+.selo { background: var(--surface); color: var(--brand-ink); font: 800 14px/1.2 var(--font-heading); padding: 8px 12px; border-radius: 999px; text-align: center; }
+.topo h1 { font: 800 28px/1.15 var(--font-heading); margin: var(--space-3) 0 0; letter-spacing: -0.01em; text-wrap: balance; }
+
+.lojas { padding: var(--space-4); display: grid; gap: var(--space-3); margin-top: calc(-1 * var(--space-2)); }
+.lojas--inline { padding: 0; margin: 0; }
+.loja { background: var(--surface); border-radius: var(--radius); padding: var(--space-4); }
+.loja h2, .loja h3 { font: 800 20px/1.2 var(--font-heading); margin: 0; }
+.loja h2 a, .loja h3 a { text-decoration: none; }
+.loja h2 a:hover, .loja h3 a:hover { text-decoration: underline; }
+.loja__info { color: var(--muted); font-size: 14px; margin: 2px 0 var(--space-2); }
+.loja__info span { white-space: nowrap; }
+.loja__endereco, .loja__telefone { margin: var(--space-3) 0 0; }
+.loja__horarios { list-style: none; padding: 0; margin: var(--space-2) 0 0; color: var(--muted); }
+.loja--detalhe { max-width: 640px; }
+.loja--detalhe .btn-whats { margin-top: var(--space-4); }
+
+.btn-whats { display: flex; align-items: center; justify-content: center; gap: var(--space-2); min-height: 52px; border-radius: 12px; background: var(--brand); color: var(--on-brand); font: 800 19px/1 var(--font-heading); text-decoration: none; touch-action: manipulation; transition: background-color .15s ease-out; }
+.btn-whats:hover { background: var(--brand-hover); }
+.btn-whats:active { background: var(--brand-ink); }
+.btn-whats--pendente { background: var(--surface); color: var(--muted); border: 1px dashed var(--muted); }
+.link-mapa { display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; color: var(--brand-ink); font-weight: 700; font-size: 16px; text-underline-offset: 3px; }
+.link-destaque { color: var(--brand-ink); font-weight: 700; text-underline-offset: 3px; }
+.icone { width: 22px; height: 22px; flex: none; background: currentColor; -webkit-mask: var(--src) center / contain no-repeat; mask: var(--src) center / contain no-repeat; }
+.icone--whats { --src: url("/assets/icones/whatsapp.svg"); width: 24px; height: 24px; }
+.icone--pin { --src: url("/assets/icones/map-pin.svg"); width: 18px; height: 18px; }
+
+.pendente { display: inline-block; border: 1px dashed var(--muted); border-radius: 6px; padding: 0 6px; margin: var(--space-2) 0 0; color: var(--muted); font-size: 14px; }
+
+.pagina { padding: var(--space-4); display: grid; gap: var(--space-4); }
+.bloco { background: var(--surface); border-radius: var(--radius); padding: var(--space-4); }
+.bloco h2, .titulo-secao { font: 800 20px/1.2 var(--font-heading); margin: 0 0 var(--space-2); }
+.titulo-secao { margin-top: var(--space-4); }
+.marcas { margin: 0; padding-left: 20px; }
+.foto { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 12px; }
+.galeria { display: grid; gap: var(--space-3); }
+
+.rodape { background: var(--ink); color: var(--on-brand); padding: var(--space-8) var(--space-4); margin-top: var(--space-6); font-size: 14px; }
+.rodape h2 { font: 800 16px/1.2 var(--font-heading); margin: 0 0 4px; }
+.rodape p { margin: 0; }
+.rodape__inner { display: grid; gap: var(--space-6); }
+.rodape__menu { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); }
+.rodape__menu a { display: inline-block; padding: 10px 0; }
+.rodape a { color: var(--on-brand); }
+.rodape :focus-visible { outline-color: var(--on-brand); }
+
+@media (min-width: 768px) {
+  .topo { padding: var(--space-6) var(--space-8) var(--space-8); }
+  .topo h1 { font-size: 40px; max-width: 18ch; }
+  .topo__logo { width: 120px; height: 120px; }
+  .lojas { grid-template-columns: 1fr 1fr; padding: var(--space-6) var(--space-8); }
+  .lojas--inline { padding: 0; }
+  .pagina { padding: var(--space-6) var(--space-8); }
+  .galeria { grid-template-columns: 1fr 1fr 1fr; }
+  .rodape__inner { grid-template-columns: repeat(4, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
