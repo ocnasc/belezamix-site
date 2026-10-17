@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Prévia visual · Início · Belezamix</title>
+<!-- why: prévia de aprovação; no site as fontes serão hospedadas localmente (task, Unresolved 9) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --brand: #EF018D;       /* invariant: igual ao fundo do logo, para o PNG não mostrar borda */
+    --on-brand: #FFFFFF;    /* invariant: só texto >=24px ou >=18.66px bold (4,15:1) */
+    --brand-ink: #B5006A;   /* invariant: >=4.5:1 no branco (6,62) e no tint (6,01) */
+    --brand-tint: #FFF0F7;
+    --ink: #1A1A1A;
+    --muted: #5C5560;       /* invariant: >=4.5:1 no branco (7,18) e no tint (6,52) */
+    --surface: #FFFFFF;
+    --radius: 16px;
+    --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-6: 24px; --space-8: 32px;
+    --font-heading: "Nunito", system-ui, sans-serif;
+    --font-body: "Nunito Sans", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--brand-tint); color: var(--ink); font: 400 16px/1.5 var(--font-body); }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--brand-ink); outline-offset: 3px; }
+
+  .hero { background: var(--brand); color: var(--on-brand); padding: var(--space-4) var(--space-4) var(--space-6); }
+  .hero__inner, .lojas, .rodape__inner { max-width: 1080px; margin: 0 auto; }
+  .hero__top { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
+  .hero__logo { width: 88px; height: 88px; display: block; margin: -8px 0 -8px -12px; }
+  .selo { background: var(--surface); color: var(--brand-ink); font: 800 14px/1 var(--font-heading); padding: 8px 12px; border-radius: 999px; white-space: nowrap; }
+  .hero h1 { font: 800 28px/1.15 var(--font-heading); margin: var(--space-3) 0 0; letter-spacing: -0.01em; text-wrap: balance; }
+
+  .lojas { padding: var(--space-4); display: grid; gap: var(--space-3); margin-top: calc(-1 * var(--space-2)); }
+  .loja { background: var(--surface); border-radius: var(--radius); padding: var(--space-4); box-shadow: 0 1px 2px rgb(26 26 26 / .06), 0 4px 16px rgb(181 0 106 / .08); }
+  .loja h2 { font: 800 20px/1.2 var(--font-heading); margin: 0; }
+  .loja__info { color: var(--muted); font-size: 14px; margin: 2px 0 var(--space-3); }
+  .loja__info span { white-space: nowrap; }
+  .btn-whats { display: flex; align-items: center; justify-content: center; gap: var(--space-2); min-height: 52px; border-radius: 12px; background: var(--brand); color: var(--on-brand); font: 800 19px/1 var(--font-heading); text-decoration: none; touch-action: manipulation; transition: background-color .15s ease-out; }
+  .btn-whats:hover { background: #D9007F; }
+  .btn-whats:active { background: var(--brand-ink); }
+  .link-mapa { display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; margin-top: var(--space-1); color: var(--brand-ink); font-weight: 700; font-size: 16px; text-underline-offset: 3px; }
+  .icone { width: 22px; height: 22px; flex: none; background: currentColor; -webkit-mask: var(--src) center / contain no-repeat; mask: var(--src) center / contain no-repeat; }
+  .icone--whats { --src: url("https://cdn.jsdelivr.net/npm/@phosphor-icons/core@2.1.1/assets/bold/whatsapp-logo-bold.svg"); width: 24px; height: 24px; }
+  .icone--pin { --src: url("https://cdn.jsdelivr.net/npm/@phosphor-icons/core@2.1.1/assets/bold/map-pin-bold.svg"); width: 18px; height: 18px; }
+
+  .pendente { display: inline-block; border: 1px dashed var(--muted); border-radius: 6px; padding: 0 6px; color: var(--muted); font-size: 13px; }
+
+  .rodape { background: var(--ink); color: #FFFFFF; padding: var(--space-8) var(--space-4); margin-top: var(--space-6); font-size: 14px; }
+  .rodape h3 { font: 800 16px/1.2 var(--font-heading); margin: 0 0 4px; }
+  .rodape__inner { display: grid; gap: var(--space-6); }
+  .rodape .pendente { color: #D9D4DC; border-color: #D9D4DC; }
+  .rodape a { color: #FFFFFF; }
+
+  @media (min-width: 768px) {
+    .hero { padding: var(--space-6) var(--space-8) var(--space-8); }
+    .hero h1 { font-size: 40px; max-width: 18ch; }
+    .hero__logo { width: 120px; height: 120px; }
+    .lojas { grid-template-columns: 1fr 1fr; padding: var(--space-6) var(--space-8); }
+    .rodape__inner { grid-template-columns: 1fr 1fr 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero__inner">
+      <div class="hero__top">
+        <img class="hero__logo" src="../../conteudo/logo-belezamix.png" alt="Belezamix Cosméticos" width="88" height="88">
+        <span class="selo">Há 20 anos em Jundiaí</span>
+      </div>
+      <h1>Tudo para unhas, cabelo e maquiagem, perto de você.</h1>
+    </div>
+  </header>
+
+  <main class="lojas" aria-label="Nossas lojas">
+    <section class="loja" aria-labelledby="loja-anhangabau">
+      <h2 id="loja-anhangabau">Anhangabaú</h2>
+      <p class="loja__info">Av. Jundiaí, 376<br><span>Seg–Sex 8h–17h</span> · <span>Sáb 8h–12h</span></p>
+      <a class="btn-whats" href="#" aria-label="Chamar no WhatsApp da loja Anhangabaú"><span class="icone icone--whats" aria-hidden="true"></span>Chamar no WhatsApp</a>
+      <a class="link-mapa" href="https://www.google.com/maps/search/?api=1&amp;query=Belezamix%20(Anhangaba%C3%BA)&amp;query_place_id=ChIJ3wjOYpAmz5QRd_NY4r1x-mo"><span class="icone icone--pin" aria-hidden="true"></span>Como chegar</a>
+    </section>
+
+    <section class="loja" aria-labelledby="loja-eloy">
+      <h2 id="loja-eloy">Eloy Chaves</h2>
+      <p class="loja__info">Av. Benedicto Castilho de Andrade, 558<br><span>Seg–Sex 8h–19h</span> · <span>Sáb 9h–12h</span></p>
+      <a class="btn-whats" href="#" aria-label="Chamar no WhatsApp da loja Eloy Chaves"><span class="icone icone--whats" aria-hidden="true"></span>Chamar no WhatsApp</a>
+      <a class="link-mapa" href="https://www.google.com/maps/search/?api=1&amp;query=Belezamix%20Eloy%20Chaves&amp;query_place_id=ChIJoygNBBklz5QRUl-scTsYM3g"><span class="icone icone--pin" aria-hidden="true"></span>Como chegar</a>
+    </section>
+  </main>
+
+  <footer class="rodape">
+    <div class="rodape__inner">
+      <div>
+        <h3>Belezamix (Anhangabaú)</h3>
+        Av. Jundiaí, 376 – Anhangabaú, Jundiaí/SP, 13208-051<br>
+        <span class="pendente">PENDENTE: telefone da loja Belezamix (Anhangabaú)</span>
+      </div>
+      <div>
+        <h3>Belezamix Eloy Chaves</h3>
+        Av. Benedicto Castilho de Andrade, 558 – Parque Eloy Chaves, Jundiaí/SP, 13212-070<br>
+        <span class="pendente">PENDENTE: telefone da loja Belezamix Eloy Chaves</span>
+      </div>
+      <div>
+        <h3>Instagram</h3>
+        <a href="https://www.instagram.com/belezamixjundiai">@belezamixjundiai</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

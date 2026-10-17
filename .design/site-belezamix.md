@@ -65,7 +65,7 @@ A alternativa mais leve, um script de build em Node puro sem dependências, ganh
 | Slice | Delivers | Status |
 |---|---|---|
 | [Conteúdo](#conteúdo) | o arquivo de conteúdo com as duas lojas e a validação de obrigatórios | open — 3 defaults taken |
-| [Visual](#visual) | identidade aplicada: paleta, tipografia e prévia da Início aprovada pelo Otávio | design |
+| [Visual](#visual) | identidade aplicada: paleta, tipografia e prévia da Início aprovada pelo Otávio | clear |
 | [Início](#início) | a página `/` | clear |
 | [Loja](#loja) | `/lojas/anhangabau/` e `/lojas/eloy-chaves/`, com schema por loja | open — 1 default taken |
 | [Páginas de apoio](#páginas-de-apoio) | `/marcas/`, `/profissionais/`, `/como-comprar/`, geradas só com dado | open — 2 defaults taken |
@@ -125,16 +125,25 @@ Open, default taken:
 
 ### Visual
 
-**Delivers** a identidade da marca aplicada ao site, aprovada pelo Otávio antes de construir as páginas. **Status: design.**
+**Delivers** a identidade da marca aplicada ao site. **Status: clear** - prévia da Início aprovada pelo Otávio em 2026-10-17: [.design/visual/inicio.html](visual/inicio.html).
 
-Fatos medidos no logo: magenta `#EF018D`, preto e branco. Branco sobre o magenta tem contraste **4,15:1**, abaixo dos 4,5:1 que o WCAG AA exige para texto normal. Por isso, texto branco sobre magenta só vale em texto grande e em botões; texto corrido usa preto ou cinza-escuro sobre fundo claro. Preto sobre magenta tem 5,06:1.
+Fatos medidos no logo: magenta `#EF018D`, preto e branco. Branco sobre o magenta tem contraste **4,15:1**, abaixo dos 4,5:1 que o WCAG AA exige para texto normal. Por isso, texto branco sobre magenta só vale em texto ≥24px ou ≥18,66px em negrito.
 
-- Design: a skill `ui-ux-pro-max` propõe a tipografia e o restante da paleta a partir dessas três cores, e monta uma prévia da página Início em um celular. A prévia tem que responder a três pontos:
-  - o "Há N anos em Jundiaí" visível sem rolar;
-  - um botão de WhatsApp por loja, com o nome da loja no botão;
-  - o "Como chegar" como ação secundária, visualmente abaixo do WhatsApp.
+| Token | Valor | Uso | Contraste medido |
+|---|---|---|---|
+| marca | `#EF018D` | faixa do topo, botão de WhatsApp | igual ao fundo do logo |
+| sobre a marca | `#FFFFFF` | texto grande sobre a marca | 4,15:1 |
+| marca para texto | `#B5006A` | links, "Como chegar", selo | 6,62:1 no branco; 6,01:1 no fundo |
+| fundo | `#FFF0F7` | fundo da página | - |
+| texto | `#1A1A1A` | texto principal; fundo do rodapé | 17,4:1 no branco |
+| texto secundário | `#5C5560` | endereço, horário | 7,18:1 no branco; 6,52:1 no fundo |
+| superfície | `#FFFFFF` | cartões das lojas | - |
 
-  Otávio aprova a prévia ou pede ajuste antes do slice Início.
+Tipografia: Nunito 700/800 nos títulos e botões, Nunito Sans 400/600/700 no texto; hospedadas no próprio site. Ícones: Phosphor, peso bold, hospedados no próprio site. A `ui-ux-pro-max` recomendou depoimentos em carrossel, Playfair Display e um roxo de destaque; os três foram descartados (depoimento inventado é proibido, o tom não é de luxo, o roxo não é da marca).
+
+Decisões da prévia aprovada:
+- O botão mostra "Chamar no WhatsApp", e o nome da loja fica no título do cartão logo acima. "Chamar no WhatsApp · <loja>" não cabe em 360px. O nome acessível do botão inclui a loja: "Chamar no WhatsApp da loja <nome curto>".
+- A frase principal é a opção 2 do briefing, sem o final, porque o "há 20 anos" já está no selo acima dela.
 
 ### Início
 
@@ -151,7 +160,7 @@ Links de saída, um por loja:
 - WhatsApp: `https://wa.me/<whatsapp>?text=<mensagemWhatsapp codificada>`
 - Como chegar: `https://www.google.com/maps/search/?api=1&query=<nome da loja codificado>&query_place_id=<placeId>`. O `query` é obrigatório no formato do Google e só é usado se o Place ID não for encontrado.
 
-Frase principal: "Há 20 anos cuidando da beleza de Jundiaí.", com o número vindo de `anoFundacao`.
+Frase principal: "Tudo para unhas, cabelo e maquiagem, perto de você.", acompanhada do selo "Há N anos em Jundiaí", com o número vindo de `anoFundacao` (slice Visual).
 
 ### Loja
 
