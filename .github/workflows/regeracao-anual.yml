@@ -1,0 +1,21 @@
+# why: o "Há N anos em Jundiaí" é calculado no build; sem um build novo em 1º de janeiro o número fica um ano atrasado
+name: Regeração anual
+
+on:
+  schedule:
+    - cron: "0 3 1 1 *"
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  disparar-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Disparar o deploy hook do Cloudflare Pages
+        env:
+          DEPLOY_HOOK: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK }}
+        run: |
+          codigo=$(curl -s -o /dev/null -w '%{http_code}' -X POST "$DEPLOY_HOOK")
+          echo "Resposta do deploy hook: $codigo"
+          case "$codigo" in 2??) ;; *) exit 1 ;; esac
