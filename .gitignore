@@ -1,0 +1,22 @@
+# Harness e squad agêntica (ferramentas de desenvolvimento, não fazem parte do site)
+.tlc/
+.claude/
+.cursor/
+.windsurf/
+.agents/
+
+# Dependências e build (quando houver script de build do site)
+node_modules/
+dist/
+build/
+
+# Ambiente
+.env
+.env.local
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Scratch de sessão do agente (processo, não documentação do projeto)
+HANDOFF.md
