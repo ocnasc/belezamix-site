@@ -1,7 +1,4 @@
-{% macro cartaoLoja(loja, nivel = 2) %}
-<section class="loja" aria-labelledby="loja-{{ loja.slug }}">
-  <h{{ nivel }} id="loja-{{ loja.slug }}"><a href="{{ loja.url }}">{{ loja.nomeCurto }}</a></h{{ nivel }}>
-  <p class="loja__info">{{ loja.enderecoCurto }}<br>{% for h in loja.horarios %}<span>{{ h }}</span>{% if not loop.last %} · {% endif %}{% endfor %}</p>
+{% macro acoesLoja(loja) %}
   {% if loja.whatsappHref %}
   <a class="btn-whats" href="{{ loja.whatsappHref }}" aria-label="Chamar no WhatsApp da loja {{ loja.nomeCurto }}"><span class="icone icone--whats" aria-hidden="true"></span>Chamar no WhatsApp</a>
   {% else %}
@@ -9,5 +6,12 @@
   <p class="pendente">{{ loja.whatsappPendente }}</p>
   {% endif %}
   <a class="link-mapa" href="{{ loja.mapaHref }}"><span class="icone icone--pin" aria-hidden="true"></span>Como chegar</a>
+{% endmacro %}
+
+{% macro cartaoLoja(loja, nivel = 2) %}
+<section class="loja" aria-labelledby="loja-{{ loja.slug }}">
+  <h{{ nivel }} id="loja-{{ loja.slug }}"><a href="{{ loja.url }}">{{ loja.nomeCurto }}</a></h{{ nivel }}>
+  <p class="loja__info">{{ loja.enderecoCurto }}<br>{% for h in loja.horarios %}<span>{{ h }}</span>{% if not loop.last %} · {% endif %}{% endfor %}</p>
+  {{ acoesLoja(loja) }}
 </section>
 {% endmacro %}
