@@ -1,7 +1,16 @@
 {
   "negocio": {
     "nome": "Belezamix",
-    "instagram": "belezamixjundiai"
+    "anoFundacao": 2006,
+    "instagram": "belezamixjundiai",
+    "formasPagamento": ["Pix", "Dinheiro", "Cartão de débito", "Cartão de crédito"],
+    "retirada": "Separe seus produtos pelo WhatsApp e retire na loja no mesmo dia, dentro do horário de funcionamento.",
+    "entrega": "Entregamos no bairro. Consulte a disponibilidade e a taxa pelo WhatsApp da loja mais próxima.",
+    "categorias": [
+      { "nome": "Cabelo profissional", "marcas": ["Alfaparf", "Keune", "Wella"], "profissional": true },
+      { "nome": "Cabelo dia a dia", "marcas": ["Lowell", "Bio Extratus", "Salon Line", "Koleston (Wella)", "Lacan"], "profissional": false },
+      { "nome": "Manicure", "marcas": ["Alicate Mondial", "Esmalte Anita", "Colorama", "Risqué", "Dailus", "Acetona Ideal"], "profissional": false }
+    ]
   },
   "lojas": [
     {
@@ -14,12 +23,20 @@
       "cep": "13208-051",
       "cidade": "Jundiaí",
       "uf": "SP",
+      "latitude": -23.190278,
+      "longitude": -46.892639,
       "placeId": "ChIJ3wjOYpAmz5QRd_NY4r1x-mo",
       "horarios": [
         { "dias": ["seg", "ter", "qua", "qui", "sex"], "abre": "08:00", "fecha": "17:00" },
         { "dias": ["sab"], "abre": "08:00", "fecha": "12:00" }
       ],
-      "mensagemWhatsapp": "Olá! Vim pelo site, loja Anhangabaú"
+      "telefone": "551133959932",
+      "whatsapp": "5511964473389",
+      "mensagemWhatsapp": "Olá! Vim pelo site, loja Anhangabaú",
+      "fotoFachada": { "arquivo": "conteudo/fotos/anhangabau/fachada.webp", "alt": "Fachada rosa da Belezamix Anhangabaú, com a porta aberta e as prateleiras de produtos à mostra" },
+      "fotos": [
+        { "arquivo": "conteudo/fotos/anhangabau/interior.webp", "alt": "Prateleiras de xampus, condicionadores e cremes para cabelo na loja Anhangabaú" }
+      ]
     },
     {
       "slug": "eloy-chaves",
@@ -31,12 +48,21 @@
       "cep": "13212-070",
       "cidade": "Jundiaí",
       "uf": "SP",
+      "latitude": -23.184667,
+      "longitude": -46.960222,
       "placeId": "ChIJoygNBBklz5QRUl-scTsYM3g",
       "horarios": [
         { "dias": ["seg", "ter", "qua", "qui", "sex"], "abre": "08:00", "fecha": "19:00" },
         { "dias": ["sab"], "abre": "09:00", "fecha": "12:00" }
       ],
-      "mensagemWhatsapp": "Olá! Vim pelo site, loja Eloy Chaves"
+      "telefone": "5511964473378",
+      "whatsapp": "5511964473389",
+      "mensagemWhatsapp": "Olá! Vim pelo site, loja Eloy Chaves",
+      "fotoFachada": { "arquivo": "conteudo/fotos/eloy-chaves/fachada.webp", "alt": "Fachada da Belezamix Eloy Chaves, com letreiro rosa e vagas de estacionamento na frente" },
+      "fotos": [
+        { "arquivo": "conteudo/fotos/eloy-chaves/interior-1.webp", "alt": "Gôndola de esmaltes e tinturas para cabelo na loja Eloy Chaves" },
+        { "arquivo": "conteudo/fotos/eloy-chaves/interior-2.webp", "alt": "Prateleiras de coloração para cabelo na loja Eloy Chaves" }
+      ]
     }
   ]
 }
