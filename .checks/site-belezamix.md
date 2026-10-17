@@ -35,7 +35,7 @@ Repositório sem código: tudo é novo. Fontes e ícones vêm de pacotes npm cop
 
 ## Checks
 
-Todo proof roda com `node --test --test-name-pattern="^Cn " tests/`, abreviado abaixo como `teste Cn`. Cada teste começa pelo id do check.
+Todo proof roda com `node --test --test-name-pattern="^Cn " "tests/**/*.test.js"`, abreviado abaixo como `teste Cn`. Cada teste começa pelo id do check.
 
 ### S1 - Conteúdo · 6 arquivos · ~8k
 
