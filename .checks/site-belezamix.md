@@ -160,7 +160,7 @@ Proof: teste C35
 - validation: C4, C6, C7, C8
 - failure modes: C4, C5, C31
 - idempotency: não se aplica - o build é função do conteúdo e do ano
-- authorization: existing - permissão de push no GitHub; secret do repositório
+- authorization: existing - permissão de push no GitHub
 - concurrency: fora do escopo - task Unresolved 8
 - data lifecycle: C22
 - dependency failure: C31; fontes e ícones locais (C35)

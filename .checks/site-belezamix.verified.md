@@ -1,97 +1,104 @@
 # Site Belezamix Verification
 
-**Verdict**: PASS (34 de 35 provados; C31 BLOCKED por dependência externa, não conta como provado)
+**Verdict**: PASS (33 de 34 checks em escopo provados; C31 BLOCKED por dependência externa, não conta como provado; C32 CANCELLED pelo Otávio junto com o critério 28, fora da contagem)
 **Profile**: light
-**Diff range**: 3193b6c..644d1d1 (HEAD de `feat/site-eleventy`)
-**Round**: 2 - scoped (round 1 em e0fe57a; fix = 644d1d1)
-**Verifier**: independent sub-agent (author != verifier; também não é o verifier da rodada 1)
+**Diff range**: 3193b6c..1cec887 (HEAD de `feat/site-eleventy`); fix desta rodada = 89093ba..1cec887
+**Round**: 3 - scoped (round 1 em e0fe57a; round 2 em 644d1d1; fix = 91c5528, 234f15c, 93fe312, 3962a79, 1cec887)
+**Verifier**: independent sub-agent (author != verifier; não é o verifier das rodadas 1 e 2)
 
-Resumo: os 10 achados da rodada 1 foram fechados. Todos os 34 checks com prova rodaram e passaram individualmente em 644d1d1. C31 continua BLOCKED (configuração do Cloudflare e a renegociação do critério 27, que ainda espera o OK do Otávio). C32 tem só a prova estática, porque a execução real está bloqueada por fator externo (Unresolved 2). Nenhum desses dois é falha do build, mas a feature só fica completa quando C31 tiver prova.
+Resumo: os achados F1 a F5 da revisão do PR foram fechados. Todos os 33 checks com prova rodaram numa única invocação de `npm test` em 1cec887 e passaram, cada id aparecendo individualmente. C31 continua BLOCKED. C32 foi cancelado pelo Otávio ("não precisa de lógica para atualizar a idade"), e o checklist, a task e o design registram isso de forma consistente. Nenhum teste foi enfraquecido nem apagado, exceto o de C32. Ficaram ressalvas, nenhuma bloqueante. A mais séria é que o teste de regressão do `--saida` apagaria o repositório se a opção voltasse.
 
-## Escopo da rodada 2
+## Escopo da rodada 3
 
-- O fix 644d1d1 mexe em `tests/conteudo.test.js`, `tests/estilo.test.js`, `tests/paginas.test.js`, `tests/publicacao.test.js`, `tests/visual.test.js` e no relatório da rodada 1. Nenhum código de produção (`lib/`, `src/`, `scripts/`, `conteudo/`, workflow) e nenhum helper (`tests/helpers.js`) mudou.
-- Todas as provas rodaram de novo, em uma invocação, em 644d1d1.
-- As citações foram atualizadas para os 5 arquivos de teste tocados. Como todo check com prova está num desses arquivos, todas as linhas da tabela foram relidas em 644d1d1.
-- O julgamento dos checks cuja asserção não mudou no fix (C1, C3, C5, C7, C9, C10, C12-C16, C18, C20-C26, C29, C30, C32, C34, C35) vem da rodada 1, marcado como carried from e0fe57a. Só as linhas mudaram.
+- Arquivos do fix: `lib/build.js`, `lib/conteudo.js`, `scripts/build.js`, `src/_includes/cartao-loja.njk`, `src/loja.njk`, `src/loja.11tydata.js` (novo), `.github/workflows/regeracao-anual.yml` (apagado), `tests/conteudo.test.js`, `tests/paginas.test.js`, `tests/publicacao.test.js`, `tests/fixtures/completo.json`, `tests/fixtures/outra/fachada-teste.webp` (novo), mais `.checks/`, `.tasks/` e `.design/`.
+- Até onde o diff chega: `caminhoFoto` (`lib/conteudo.js:102`) decide o `src` da fachada e da galeria e o destino da cópia (C8, C18, C19, C21, C29). O macro `acoesLoja` (`cartao-loja.njk:1`) é usado em Início, loja e apoio (C11, C13-C15, C17, C18, C26). `loja.11tydata.js` alimenta `title`, `og:title`, `description`, `h1` e JSON-LD da loja (C16, C18-C20). A troca da fachada da Eloy Chaves na fixture afeta C10, C18, C19, C20 e C21. Pelo CLI, `scripts/build.js` afeta C30.
+- Todas as provas rodaram de novo em 1cec887, numa invocação.
+- As citações foram atualizadas nos 3 arquivos de teste tocados. As linhas mudaram em `paginas.test.js` (+13 depois de `:72`), `publicacao.test.js` (+1) e `conteudo.test.js` (+20 depois de `:129`). `visual.test.js` e `estilo.test.js` não mudaram: citações carried from 644d1d1.
+- Os demais checks foram carried from 644d1d1 com a citação conferida. O próprio julgamento deles vem das rodadas 1 e 2.
 
-## Steps que não rodaram (profile `light`), carried from e0fe57a
+## Steps que não rodaram (profile `light`), carried from 644d1d1
 
-- Step 1, checklist contra as fontes binding (`ui`): não rodou. `.design/visual/inicio.html` não foi aberto. O fix não tocou a interface.
-- Join de `Coverage` (`standard`/`ui`): não rodou. O checklist não tem seção `Coverage`.
-- Veredictos de `Test policy` (`standard`/`ui`): não rodaram. O checklist não tem `## Test policy`.
-- Step 4, injeção de falhas (`standard`/`ui`): não rodou. O fechamento do achado 1 foi julgado pela leitura da asserção contra `lib/conteudo.js`, não por mutação executada.
+- Step 1, checklist contra as fontes binding (`ui`): não rodou. `.design/visual/inicio.html` não foi aberto. O fix mexe no markup das ações da loja (macro), mas o HTML gerado mantém classes, texto e ordem, e C11/C17/C34 passaram no navegador.
+- `Coverage` e `Test policy`: não rodaram. O checklist não tem essas seções.
+- Step 4, injeção de falhas: não rodou. As asserções novas foram julgadas pela leitura contra o código (abaixo), não por mutação executada.
 
-## Achados da rodada 1 (verified at 644d1d1)
+## Fix da revisão do PR (verified at 1cec887)
 
-| # | Achado da rodada 1 | Fechado | Evidência |
+| # | Achado | Fechado | Evidência |
 |---|---|---|---|
-| 1 | C8: regra `.webp` sem prova que a isole | sim | `tests/conteudo.test.js:113` e `:116` agora usam `conteudo/logo-belezamix.png`, que existe (`ls conteudo` → `conteudo.json`, `logo-belezamix.png`). `raiz` = `process.cwd()` (`lib/build.js:33`, `lib/conteudo.js:24`), então o `existsSync` de `lib/conteudo.js:62` aceitaria o arquivo e a recusa vem do ramo `!arquivo.endsWith(".webp")` de `:60-61`. A asserção `:124` - `l.startsWith(\`Belezamix (Anhangabaú): ${campo} inválido\`) && l.includes(motivo)` com `motivo` = `"não é .webp"` ou `"não existe"` - lê o `detalhe` que `lib/build.js:37` coloca na linha. Sem o ramo `.webp`, os casos de `:113`/`:116` não teriam erro e `:122` (`notEqual(r.codigo, 0)`) falharia. Os casos "não existe" (`:114-115`) cobrem o outro ramo com o motivo dele. Rodou nos 2 modos |
-| 2 | C28: domínio esperado vindo do código testado | sim | `tests/publicacao.test.js:39-40` - `assert.equal(canonical, "https://belezamixjundiai.com.br" + url)` e o mesmo para `og:url`. O import de `DOMINIO` saiu (`:5`) |
-| 3 | C4: conjunto de obrigatórios vindo do código testado | sim | `conteudo.test.js:61` - `deepEqual(OBRIGATORIOS_NEGOCIO, ["nome", "anoFundacao", "instagram"])`; `:62-65` - `deepEqual([...OBRIGATORIOS_LOJA].sort(), [<17 literais>].sort())`. Conferi contra `.tasks/site-belezamix.md:27-28` (3 de Negócio, 16 de Loja) mais `nomeCurto`, que a Landing do checklist torna obrigatório no lançamento |
-| 4 | C19: Eloy Chaves só com `@type` e `telephone` | sim | `tests/paginas.test.js:90-104` - objeto literal `esperadoEloy` com `name`, `url`, `telephone`, `address`, `geo`, `openingHoursSpecification` (sábado `09:00`-`12:00`), `image`, `sameAs`; `:108` - `assert.deepEqual(JSON.parse(blocos[0][1]), ldEsperado, url)` para as duas lojas |
-| 5 | C27: link interno absoluto para a prévia não testado | sim | `tests/publicacao.test.js:28` - `for (const ref of referencias(html)) assert.ok(!ref.startsWith(URL_PREVIA), ...)` sem o filtro `ehInterno`. Os builds `previa` e `padrao` usam `urlBase: URL_PREVIA` (`tests/helpers.js:25`). Na prévia não há canonical (`src/_includes/base.njk:8`), então a asserção não tem falso positivo. Ressalva baixa: um link absoluto fixo para o domínio de produção numa prévia não seria pego. Os templates não emitem isso hoje |
-| 6 | C2: "exatamente" não verificado nas lojas | sim | `conteudo.test.js:45-46` - `deepEqual(Object.keys(loja).sort(), [...chavesLoja].sort(), loja.slug)` com as 12 chaves literais; `:47-48` - valores literais de `nomeCurto` e `mensagemWhatsapp` |
-| 7 | C6: borda superior de `^55\d{10,11}$` não testada | sim | `conteudo.test.js:91` - novo caso `["telefone", "55119999900001"]` (55 + 12 dígitos); `:95-96` - `notEqual(r.codigo, 0)`, `startsWith(\`Belezamix (Anhangabaú): ${campo} inválido\`)`. Nos 2 modos |
-| 8 | C11: conteúdo das lojas provado só pela caixa | sim | `tests/visual.test.js:44-47` - `assert.equal(await textoDe(...h2), "Anhangabaú")`, `"Eloy Chaves"`, `.loja__info` = `"Av. Jundiaí, 376 Seg–Sex 8h–17h · Sáb 8h–12h"` e `"Av. Benedicto Castilho de Andrade, 558 Seg–Sex 8h–19h · Sáb 9h–12h"`; `:48-49` - textos do WhatsApp e do Como chegar da Anhangabaú. O texto dos botões da Eloy Chaves continua provado pelo HTML em C14 (`paginas.test.js:38`) |
-| 9 | C17: provado só em 360 px | sim | `visual.test.js:58-59` - `for (const largura of [360, 1280])`, `abrir(url, largura, 800)`; `:65-66` - `w.y < m.y` e `w.width * w.height > m.width * m.height` nas duas larguras |
-| 10 | C33: cores nomeadas fora do regex | sim | `tests/estilo.test.js:16-20` - extrai os valores de `color`, `background(-color)`, `border*`, `outline(-color)`, `fill`, `stroke`, remove `var(--*)`, hex, `currentColor` e palavras neutras, e `assert.doesNotMatch(semPermitidos, /[a-z]{3,}/i, ...)`. Ressalva baixa: `text-decoration` e `box-shadow` ficam fora da lista de propriedades. Hoje `src/assets/site.css` só tem `text-decoration: none`/`underline` (`:41`, `:42`, `:50`) e nenhum `box-shadow` (busca por `shadow\|decoration\|caret\|accent\|gradient` só achou essas 3 linhas) |
+| F1 | regeração anual (critério 28) | sim, cancelado pelo usuário | `.tasks/site-belezamix.md:91` - "28. Cancelado pelo Otávio em 2026-10-17 (\"não precisa de lógica para atualizar a idade\")". `.checks/site-belezamix.md:18` (Out of scope, com a mesma citação) e `:144-145` - "C32 - Cancelado com o critério 28", "Proof: nenhuma - check removido". O design tirou a linha de 1º de janeiro e a fonte do deploy hook. Unresolved foram renumerados de 9 para 8 de forma consistente (task e checklist citam 1, 5, 6 e 8 nas posições novas). `.github/` não existe mais (`ls .github` → não encontrado; `git ls-files` sem workflow) |
+| F2 | escape duplo em título/h1/descrição da loja | sim | `src/loja.11tydata.js:3-7` - `eleventyComputed` com funções que devolvem texto cru; `base.njk:6`, `:7`, `:11`, `:26` escapam uma vez só. Prova: `tests/paginas.test.js:74-85`, com bairro/nome `D'Ávila & Cia`. `:80` `title`, `:81` `og:title`, `:82` `description`, `:83` `h1` iguais ao texto cru (o helper `decodificar`, `tests/helpers.js:49-50`, decodifica uma vez só, então um escape duplo não viraria o texto cru). `:84` - `doesNotMatch(html, /&amp;(amp|#39);/)` |
+| F5 | ações da loja duplicadas | sim | `src/_includes/cartao-loja.njk:1-9` - macro `acoesLoja`; usado em `:15` (cartão) e `src/loja.njk:21`. O markup inline saiu da página da loja |
+| F3 | foto publicada por nome sem loja; colisão | sim | `lib/conteudo.js:102` - `caminhoFoto = (slug, arquivo) => \`fotos/${slug}/${path.basename(arquivo)}\``. `lib/build.js:45-46`, `:56` copiam para o mesmo destino. `lib/conteudo.js:66-67` recusa dois arquivos diferentes com o mesmo destino na mesma loja. Provas: `tests/conteudo.test.js:131-142` (2 modos) e `:144-149`; `paginas.test.js:65`, `:100`, `:115` |
+| F4 | `--saida` no CLI apagava qualquer caminho | sim | `scripts/build.js:4-9` - `parseArgs` só com `lancamento` e `conteudo`; o `strict` padrão recusa opção desconhecida. Prova: `tests/publicacao.test.js:60-64` - `status ≠ 0`, `stderr` casa `/saida/`. Ver ressalva 2 |
 
-## Checks (proof run e citações verified at 644d1d1)
+## Testes enfraquecidos ou apagados (verified at 1cec887)
 
-Proof run de todos: `npm test` (= `node --test "tests/**/*.test.js"`), uma invocação, exit 0, 37 testes. Cada id de C1 a C35, exceto C31, aparece individualmente como `✔`. C6, C7 e C8 aparecem duas vezes (previa e lancamento).
+`git diff 89093ba..1cec887 -- tests/`:
+- Apagado: só `C32 workflow anual ...` (`publicacao.test.js`), junto com o import `existsSync`, que ficou sem uso. Está coberto pelo cancelamento do critério 28.
+- Alterado: `paginas.test.js:65` (era `i.src === "/fotos/fachada-teste.webp"`, agora o caminho por slug, ainda literal e por página), `:100` e `:115` (`image` do JSON-LD por slug; antes as duas lojas esperavam o mesmo caminho). Ficaram mais estritos, não mais fracos.
+- Fixture: `completo.json:59` - a fachada da Eloy Chaves passou para `tests/fixtures/outra/fachada-teste.webp`, mesmo nome e conteúdo diferente (`cmp` difere no byte 5). É de propósito, para exercitar o mesmo nome em lojas diferentes.
+- Adicionados: C8 nome repetido ×2, C8 lojas diferentes, C18 escape duplo, C30 CLI recusa `--saida`.
+- Nenhuma asserção removida ou afrouxada fora do C32.
+
+## Checks
+
+Proof run: `npm test` (= `node --test "tests/**/*.test.js"`), uma invocação na raiz, em 1cec887, exit 0, 41 testes, 41 passaram. Cada id de C1 a C30, C33, C34 e C35 aparece individualmente como `✔`. C6, C7 e C8 aparecem por modo, e C8 tem 5 testes. C18 e C30 têm 2 testes cada. Nenhum teste tem o id C31 ou C32.
 
 | Check | Claim | Proof run | Evidence | Result |
 |---|---|---|---|---|
-| C1 | nenhum template tem endereço, horário, Instagram ou Place ID | `✔ C1 ...` | `tests/conteudo.test.js:18` - `assert.ok(!conteudo.includes(fato))`, fatos literais em `:10-11` | PASS (carried from e0fe57a) |
-| C2 | conteudo.json só com campos das fontes; 12 ausentes | `✔ C2 ...` | `conteudo.test.js:23` - `deepEqual(REAL.negocio, {...})`; `:43-44` - os 12 ausentes; `:46` - `deepEqual(Object.keys(loja).sort(), [...chavesLoja].sort())` | PASS (verified at 644d1d1) |
-| C3 | prévia: código 0 e `[PENDENTE: ...]` | `✔ C3 ...` | `conteudo.test.js:53` - `equal(r.codigo, 0)`; `:55` - `includes("[PENDENTE: whatsapp da loja Belezamix Eloy Chaves]")`; `:56` - `"[PENDENTE: anoFundacao]"` | PASS (carried from e0fe57a) |
-| C4 | lançamento: 3 + 17 obrigatórios, código ≠ 0, linha `<nome>: <campo>` | `✔ C4 ...` | `conteudo.test.js:61-65` - listas literais; `:70`/`:78` - `notEqual(r.codigo, 0)`; `:71` - ``includes(`Negócio: ${campo}`)``; `:79` - ``includes(`${alvo}: ${campo}`)`` | PASS (verified at 644d1d1) |
-| C5 | lançamento recusado não escreve `.html` | `✔ C5 ...` | `conteudo.test.js:85-86` - `notEqual(r.codigo, 0)`; `deepEqual(listarHtml(r.saida), [])` | PASS (carried from e0fe57a) |
-| C6 | whatsapp/telefone fora de `^55\d{10,11}$` recusa nos 2 modos | `✔ C6 ... (previa)`, `✔ C6 ... (lancamento)` | `conteudo.test.js:91` - 4 casos, incluindo `55119999900001`; `:95-96` - `notEqual(r.codigo, 0)`, ``startsWith(`Belezamix (Anhangabaú): ${campo} inválido`)`` | PASS (verified at 644d1d1) |
-| C7 | abre/fecha fora de `^\d{2}:\d{2}$` recusa nos 2 modos | `✔ C7 ...` ×2 | `conteudo.test.js:105-106` - `notEqual(r.codigo, 0)`; ``startsWith(`Belezamix Eloy Chaves: horarios[0].${campo} inválido`)`` | PASS (carried from e0fe57a) |
-| C8 | foto inexistente **ou** sem `.webp` recusa nos 2 modos | `✔ C8 ...` ×2 | `conteudo.test.js:113-116` - casos com motivo; `:122` - `notEqual(r.codigo, 0)`; `:124` - `startsWith(...) && l.includes(motivo)` | PASS (verified at 644d1d1; antes FAIL de prova) |
-| C9 | opcional ausente: sem seção, sem `[PENDENTE` | `✔ C9 ...` | `conteudo.test.js:139-140` - `!html.includes("[PENDENTE")`, `!html.includes('class="galeria"')`; `:142` - `!r.existe(url)` | PASS (carried from e0fe57a) |
-| C10 | telefone exibido e no JSON-LD | `✔ C10 ...` | `conteudo.test.js:146-147` - `deepEqual(formatarTelefone(...), { exibido, schema })`; `:151-154` - texto e `"telephone":"+55 11 ..."` | PASS (carried from e0fe57a) |
-| C11 | primeira tela em 360×640 com logo, selo, h1 e as 2 lojas completas | `✔ C11 [navegador] ...` | `tests/visual.test.js:40-41` - caixa visível e `caixa.y + caixa.height <= 640`; `:44-49` - textos literais de h2, `.loja__info` e ações; `:50-51` - h1 e selo | PASS (verified at 644d1d1) |
-| C12 | selo "Há 20 anos" com 2006 em 2026; `[PENDENTE]` sem ano; ausente nas outras páginas e no rodapé | `✔ C12 ...` | `tests/paginas.test.js:16` - `includes("Há 20 anos em Jundiaí")`; `:18`, `:20` - `!/Há .{0,40} anos/.test(...)`; `:22` - `"Há [PENDENTE: anoFundacao] anos em Jundiaí"` | PASS (carried from e0fe57a) |
-| C13 | URL exata do WhatsApp Anhangabaú | `✔ C13 ...` | `paginas.test.js:27` - `hrefs.includes(WHATS_ANHANGABAU)`, literal `:11` | PASS (carried from e0fe57a) |
-| C14 | mensagens por loja, texto visível, aria-label | `✔ C14 ...` | `paginas.test.js:35` - mensagens literais; `:36` - aria-labels; `:38` - `["Chamar no WhatsApp", "Chamar no WhatsApp"]` | PASS (carried from e0fe57a) |
-| C15 | URL do "Como chegar" | `✔ C15 ...` | `paginas.test.js:43` - `hrefs.includes(MAPA_ANHANGABAU)` (literal `:12`); `:44` - URL da Eloy Chaves | PASS (carried from e0fe57a) |
-| C16 | og:title/description/url/image absoluto em toda página | `✔ C16 ...` | `paginas.test.js:50` - `meta(html, p)?.length > 0`; `:51` - `equal(meta(html, "og:url"), URL_PREVIA + url)`; `:52` - `og:image` absoluto | PASS (carried from e0fe57a) |
-| C17 | WhatsApp antes do "Como chegar" e com área maior, em toda página | `✔ C17 [navegador] ...` | `visual.test.js:58` - larguras `[360, 1280]`; `:61` - `blocos.length > 0`; `:65` - `w.y < m.y`; `:66` - `w.width * w.height > m.width * m.height` | PASS (verified at 644d1d1) |
-| C18 | páginas de loja: fachada+alt, endereço, horários, ações, `<title>` | `✔ C18 ...` | `paginas.test.js:63` - `equal(..., titulo)`; `:65` - `img.foto--fachada` com `alt` e `src`; `:67-70` - endereço, horários, 1 `.btn-whats`, 1 `.link-mapa` | PASS (carried from e0fe57a) |
-| C19 | exatamente um JSON-LD `Store` por loja, igual ao conteúdo | `✔ C19 ...` | `paginas.test.js:107` - `equal(blocos.length, 1, url)`; `:108` - `deepEqual(JSON.parse(blocos[0][1]), ldEsperado, url)` com literais `:75-89` e `:90-104` | PASS (verified at 644d1d1) |
-| C20 | NAP igual na página da loja e no rodapé de todas | `✔ C20 ...` | `paginas.test.js:120`, `:123` - `includes(v)` para os literais de `:115-116` | PASS (carried from e0fe57a) |
-| C21 | sem `fotos` não há galeria, a fachada continua | `✔ C21 ...` | `paginas.test.js:130-132` | PASS (carried from e0fe57a) |
-| C22 | sem dados de apoio, páginas não geradas nem no menu | `✔ C22 ...` | `paginas.test.js:140-141` - `!r.existe(url)`, nenhum `<a href=url>`; `:144` controle positivo | PASS (carried from e0fe57a) |
-| C23 | /marcas/ agrupada na ordem, `<title>` | `✔ C23 ...` | `paginas.test.js:150` - título literal; `:152` - `deepEqual(secoes, [...])` | PASS (carried from e0fe57a) |
-| C24 | /profissionais/ por categoria profissional ou listaVip; link da lista | `✔ C24 ...` | `paginas.test.js:157-159`, `:164`, `:169-170`, `:175` | PASS (carried from e0fe57a) |
-| C25 | /como-comprar/ só com as seções informadas | `✔ C25 ...` | `paginas.test.js:180-182` | PASS (carried from e0fe57a) |
-| C26 | um "Chamar no WhatsApp" por loja nas páginas de apoio | `✔ C26 ...` | `paginas.test.js:188` - `deepEqual(labels, [...])` | PASS (carried from e0fe57a) |
-| C27 | prévia default: noindex, sem sitemap, links internos com `/` | `✔ C27 ...` | `tests/publicacao.test.js:23` - `!r.existe("/sitemap.xml")`; `:26` - `noindex(html)`; `:27` - `ref.startsWith("/")`; `:28` - `!ref.startsWith(URL_PREVIA)` | PASS (verified at 644d1d1) |
-| C28 | lançamento: sem noindex, canonical/og:url no domínio, sitemap exato | `✔ C28 ...` | `publicacao.test.js:37` - `!noindex(html)`; `:39-40` - literal `"https://belezamixjundiai.com.br" + url`; `:45-46` - `deepEqual(locs, canonicas)`, `equal(locs.length, 6)` | PASS (verified at 644d1d1) |
-| C29 | todo link interno existe na saída, nos 2 modos | `✔ C29 ...` | `publicacao.test.js:52` - `r.existe(ref)`; `:55` - idem para `url(...)` do CSS | PASS (carried from e0fe57a) |
-| C30 | `npm test` roda o runner nativo sobre `tests/` | `npm test` exit 0 + `✔ C30 ...` | `publicacao.test.js:61` - `equal(pkg.scripts.test, 'node --test "tests/**/*.test.js"')` | PASS (carried from e0fe57a) |
-| C31 | Cloudflare roda os testes antes do build e não publica se falharem | nenhuma (por desenho) | sem `file:line`; `rg -n "C31" tests/` sem resultado. Depende da configuração do Cloudflare (Unresolved 1) e da renegociação do critério 27, que ainda espera o OK do Otávio | **BLOCKED** (carried from e0fe57a) |
-| C32 | workflow anual: cron, dispatch, secret, falha sem 2xx | `✔ C32 ...` (estático) | `publicacao.test.js:68` - cron; `:69` - `workflow_dispatch:`; `:70` - secret; `:71` - `-X POST "$DEPLOY_HOOK"`; `:72` - `case "$codigo" in 2??) ;; *) exit 1 ;; esac` | PASS só estático; execução real bloqueada externamente (Unresolved 2) (carried from e0fe57a) |
-| C33 | só os 6 tokens (+ hover/pressionado), Nunito 700/800, Nunito Sans 400/600/700 | `✔ C33 ...` | `tests/estilo.test.js:14` - hex ∈ tokens; `:15` - nenhuma função de cor; `:20` - nenhuma cor nomeada nas propriedades de cor; `:27` - `deepEqual(faces.sort(), [...])` | PASS (verified at 644d1d1) |
-| C34 | branco sobre `#EF018D` só em texto grande; normal ≥4,5:1 | `✔ C34 [navegador] ...` | `visual.test.js:104-107` - `grande`, `brancoNoMagenta && !grande`, `razao < 4.5`; `:112` - `deepEqual(violacoes, [])`, 360 e 1280 px | PASS (carried from e0fe57a) |
-| C35 | nenhum recurso de outro domínio | `✔ C35 ...` | `estilo.test.js:42-43` - sem `@import` nem `url()` externo; `:55-56` - `recursos.length > 0`, `!externo(u)` | PASS (carried from e0fe57a) |
+| C1 | nenhum template tem endereço, horário, Instagram ou Place ID | `✔ C1 ...` | `tests/conteudo.test.js:18` | PASS (carried from 644d1d1; arquivo de teste tocado, linha conferida) |
+| C2 | conteudo.json só com campos das fontes; 12 ausentes | `✔ C2 ...` | `conteudo.test.js:23`, `:43-48` | PASS (carried from 644d1d1) |
+| C3 | prévia: código 0 e `[PENDENTE: ...]` | `✔ C3 ...` | `conteudo.test.js:53-56` | PASS (carried from 644d1d1) |
+| C4 | lançamento: 3 + 17 obrigatórios, código ≠ 0, linha `<nome>: <campo>` | `✔ C4 ...` | `conteudo.test.js:61-65`, `:70-71`, `:78-79` | PASS (carried from 644d1d1) |
+| C5 | lançamento recusado não escreve `.html` | `✔ C5 ...` | `conteudo.test.js:85-86` | PASS (carried from 644d1d1) |
+| C6 | whatsapp/telefone fora de `^55\d{10,11}$` recusa nos 2 modos | `✔ C6 ...` ×2 | `conteudo.test.js:91`, `:95-96` | PASS (carried from 644d1d1) |
+| C7 | abre/fecha fora de `^\d{2}:\d{2}$` recusa nos 2 modos | `✔ C7 ...` ×2 | `conteudo.test.js:105-106` | PASS (carried from 644d1d1) |
+| C8 | foto inexistente ou sem `.webp` recusa nos 2 modos | `✔ C8 foto inexistente ...` ×2, `✔ C8 ... nome repetido ...` ×2, `✔ C8 lojas diferentes ...` | `conteudo.test.js:113-116` - 4 casos com motivo; `:122` - `notEqual(r.codigo, 0)`; `:124` - `startsWith(...) && includes(motivo)`. Regressão F3: `:134` - `fotos[0]` = `outra/fachada-teste.webp` (mesmo nome da fachada `completo.json:36`); `:136` - `notEqual(r.codigo, 0)`; `:138` - linha `Belezamix (Anhangabaú): fotos[0] inválido` com `nome repetido`; `:146-148` - código 0 e `/fotos/anhangabau/` e `/fotos/eloy-chaves/fachada-teste.webp` existem | PASS (verified at 1cec887) |
+| C9 | opcional ausente: sem seção, sem `[PENDENTE` | `✔ C9 ...` | `conteudo.test.js:159-160`, `:162` | PASS (carried from 644d1d1; linhas atualizadas) |
+| C10 | telefone exibido e no JSON-LD | `✔ C10 ...` | `conteudo.test.js:166-167`, `:171-174` | PASS (carried from 644d1d1; linhas atualizadas; fixture tocada, rodou verde) |
+| C11 | primeira tela em 360×640 com logo, selo, h1 e as 2 lojas completas | `✔ C11 [navegador] ...` | `tests/visual.test.js:40-41`, `:44-51` (arquivo não tocado) | PASS (verified at 1cec887: o macro mudou o cartão, a asserção literal de textos e caixas passou) |
+| C12 | selo "Há 20 anos" só na Início; `[PENDENTE]` sem ano | `✔ C12 ...` | `paginas.test.js:16`, `:18`, `:20`, `:22` | PASS (carried from 644d1d1) |
+| C13 | URL exata do WhatsApp Anhangabaú | `✔ C13 ...` | `paginas.test.js:27` - `hrefs.includes(WHATS_ANHANGABAU)`, literal `:11` | PASS (verified at 1cec887; botão agora sai de `acoesLoja`) |
+| C14 | mensagens por loja, texto visível, aria-label | `✔ C14 ...` | `paginas.test.js:33` - 2 botões; `:35` mensagens literais; `:36` aria-labels; `:38` texto visível | PASS (verified at 1cec887) |
+| C15 | URL do "Como chegar" | `✔ C15 ...` | `paginas.test.js:43` (literal `:12`), `:44` | PASS (verified at 1cec887) |
+| C16 | og:title/description/url/image absoluto em toda página | `✔ C16 ...` | `paginas.test.js:50-52` | PASS (verified at 1cec887; título e descrição da loja vêm de `loja.11tydata.js`) |
+| C17 | WhatsApp antes do "Como chegar" e com área maior, em toda página | `✔ C17 [navegador] ...` | `visual.test.js:58`, `:61`, `:65-66` (arquivo não tocado) | PASS (verified at 1cec887: rodou sobre o markup do macro) |
+| C18 | páginas de loja: fachada+alt, endereço, horários, ações, `<title>` | `✔ C18 páginas de loja ...`, `✔ C18 ... não escapam duas vezes` | `paginas.test.js:63` - `title` literal; `:65` - `img.foto--fachada`, `alt` e `src === /fotos/<slug>/fachada-teste.webp`; `:67-68` endereço e horários; `:69-70` - 1 `.btn-whats` e 1 `.link-mapa` em `main`; `:80-84` - sem escape duplo | PASS (verified at 1cec887) |
+| C19 | exatamente um JSON-LD `Store` por loja, igual ao conteúdo | `✔ C19 ...` | `paginas.test.js:88-117` - objetos literais, `image` por slug em `:100` e `:115`; `:120` - `equal(blocos.length, 1)`; `:121` - `deepEqual(JSON.parse(...), ldEsperado)`; `:123` sem JSON-LD em `/` e `/marcas/` | PASS (verified at 1cec887; `jsonld` agora vem de `loja.11tydata.js:7` e sai por `base.njk:17` `| safe`) |
+| C20 | NAP igual na página da loja e no rodapé de todas | `✔ C20 ...` | `paginas.test.js:128-129` - literais; `:133`, `:136` - `includes(v)` | PASS (verified at 1cec887; `h1` da loja mudou de origem) |
+| C21 | sem `fotos` não há galeria, a fachada continua | `✔ C21 ...` | `paginas.test.js:143-145` | PASS (verified at 1cec887; `src` da galeria/fachada por `caminhoFoto`) |
+| C22 | sem dados de apoio, páginas não geradas nem no menu | `✔ C22 ...` | `paginas.test.js:153-154`, `:157` | PASS (carried from 644d1d1; linhas atualizadas) |
+| C23 | /marcas/ agrupada na ordem, `<title>` | `✔ C23 ...` | `paginas.test.js:163`, `:165` | PASS (carried from 644d1d1; linhas atualizadas) |
+| C24 | /profissionais/ por categoria profissional ou listaVip; link da lista | `✔ C24 ...` | `paginas.test.js:170-172`, `:177`, `:182-183`, `:188` | PASS (carried from 644d1d1; linhas atualizadas) |
+| C25 | /como-comprar/ só com as seções informadas | `✔ C25 ...` | `paginas.test.js:193-195` | PASS (carried from 644d1d1; linhas atualizadas) |
+| C26 | um "Chamar no WhatsApp" por loja nas páginas de apoio | `✔ C26 ...` | `paginas.test.js:201` - `deepEqual(labels, ["Chamar no WhatsApp da loja Anhangabaú", "... Eloy Chaves"])` nas 3 páginas | PASS (verified at 1cec887; cartão de apoio usa `acoesLoja`) |
+| C27 | prévia default: noindex, sem sitemap, links internos com `/` | `✔ C27 ...` | `tests/publicacao.test.js:24`, `:27`, `:28`, `:29` | PASS (carried from 644d1d1; linhas +1) |
+| C28 | lançamento: sem noindex, canonical/og:url no domínio, sitemap exato | `✔ C28 ...` | `publicacao.test.js:38`, `:40-41`, `:46-47` | PASS (carried from 644d1d1; linhas +1) |
+| C29 | todo link interno existe na saída, nos 2 modos | `✔ C29 ...` | `publicacao.test.js:53` - `r.existe(ref)`, que agora inclui `/fotos/<slug>/...`; `:56` - `url(...)` do CSS | PASS (verified at 1cec887) |
+| C30 | `npm test` roda o runner nativo sobre `tests/` | `npm test` exit 0, `✔ C30 npm test ...`, `✔ C30 o CLI de build não aceita --saida` | `publicacao.test.js:68` - `equal(pkg.scripts.test, 'node --test "tests/**/*.test.js"')`; `:61-63` - CLI com `--saida` sai ≠ 0 | PASS (verified at 1cec887; ressalvas 2 e 3) |
+| C31 | Cloudflare roda os testes antes do build e não publica se falharem | nenhuma (por desenho) | sem `file:line`; nenhum teste com o id. Depende do projeto no Cloudflare (task Unresolved 1, `npm run test:ci && npm run build`) | **BLOCKED** (carried from 644d1d1) |
+| C32 | cancelado com o critério 28 | nenhuma (check removido) | `.tasks/site-belezamix.md:91`; `.checks/site-belezamix.md:18`, `:144-145`; teste e workflow removidos | **CANCELLED** pelo usuário (verified at 1cec887); fora da contagem |
+| C33 | só os 6 tokens (+ hover/pressionado), Nunito 700/800, Nunito Sans 400/600/700 | `✔ C33 ...` | `tests/estilo.test.js:14`, `:15`, `:20`, `:27` (arquivo e CSS não tocados) | PASS (carried from 644d1d1) |
+| C34 | branco sobre `#EF018D` só em texto grande; normal ≥4,5:1 | `✔ C34 [navegador] ...` | `visual.test.js:104-107`, `:112` | PASS (carried from 644d1d1; rodou verde sobre o markup novo) |
+| C35 | nenhum recurso de outro domínio | `✔ C35 ...` | `estilo.test.js:42-43`, `:55-56` | PASS (carried from 644d1d1) |
 
-## Swept rows que resolvem para "existing", carried from e0fe57a
+## Swept rows que resolvem para "existing" (verified at 1cec887)
 
 | Row | Constraint citada | No código |
 |---|---|---|
-| authorization: permissão de push no GitHub; secret do repositório | o hook vem de um secret e não fica no repositório | sim. `.github/workflows/regeracao-anual.yml:16` - `DEPLOY_HOOK: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK }}`, `permissions: {}`. O workflow não mudou no fix |
+| authorization: permissão de push no GitHub; secret do repositório | só quem pode fazer push dispara a publicação | Parcial. O push depende de permissão externa ao repositório, ok. A metade "secret do repositório" ficou desatualizada: o workflow e o secret saíram (`.github/` não existe). A task (`.tasks/site-belezamix.md`, Swept authorization) já tirou o secret; o checklist (`.checks/site-belezamix.md:163`) não. Ressalva 4 |
 
 ## Achados restantes (do mais grave para o menos grave)
 
-1. **C31 BLOCKED** (externo): não tem prova executável enquanto o Cloudflare não estiver configurado e o Otávio não aprovar a renegociação do critério 27.
-2. **C32 só estático** (externo): a execução real do workflow depende do deploy hook (Unresolved 2).
-3. Ressalva baixa, C33: `text-decoration`, `box-shadow` e outras propriedades com cor ficam fora da varredura de cores nomeadas. Hoje o CSS não tem cor nessas propriedades.
-4. Ressalva baixa, C27: só links absolutos para `URL_PREVIA` são recusados. Um link fixo para o domínio de produção numa prévia passaria. Hoje os templates não emitem isso.
+1. **C31 BLOCKED** (externo): sem prova executável até o projeto existir no Cloudflare com `npm run test:ci && npm run build` (task Unresolved 1).
+2. **Médio, teste de C30 que apaga o repo**: `tests/publicacao.test.js:61` roda `scripts/build.js --saida .` na raiz do repositório. Se a opção voltar, o próprio `npm test` chama `rmSync(path.resolve(raiz, "."), { recursive: true, force: true })` (`lib/build.js:43`) com a prévia válida (C27 mostra `REAL` com código 0) e apaga a cópia de trabalho, inclusive `.git`. Hoje a prova vale. Mas a falha que ele vigia é destrutiva. O mais seguro seria apontar `--saida` para uma pasta temporária com um arquivo sentinela e verificar que o sentinela continua lá.
+3. **Baixo, regra nova fora do texto do check**: a recusa por "nome repetido" e o caminho `fotos/<slug>/` não estão no critério 5 (`.tasks/site-belezamix.md:29-32`) nem no texto do C8. O teste do CLI ficou sob o id C30, mas a afirmação do C30 é sobre o script `npm test`. O comportamento está provado, mas não registrado como critério.
+4. **Baixo, checklist desatualizado**: `.checks/site-belezamix.md:163` ainda cita "secret do repositório".
+5. **Baixo, C8 lojas diferentes**: `conteudo.test.js:147-148` confere só que os dois arquivos existem, não que cada loja recebeu a própria foto. As fixtures diferem no conteúdo, então seria possível comparar os bytes.
+6. Ressalvas baixas, carried from 644d1d1: em C33, `text-decoration`/`box-shadow` ficam fora da varredura de cores nomeadas; em C27, um link fixo para o domínio de produção numa prévia não seria pego.
+7. Muito baixo, inferido e não executado: 93fe312 muda os caminhos das fotos e só 1cec887 atualiza C18/C19. Pela leitura, os testes ficam vermelhos em 93fe312, o que atrapalha um `git bisect`.
 
 ## Gate
 
-`npm test` - 37 passed, 0 failed, 0 cancelled, 0 skipped (34 checks com teste, C6/C7/C8 duas vezes; C31 sem teste por desenho), exit 0, duration 6,6 s, em 644d1d1. `git status --porcelain` limpo antes desta escrita.
+`npm test` - 41 passed, 0 failed, 0 cancelled, 0 skipped, exit 0, duration 7,6 s, em 1cec887 (33 checks com teste; C6/C7 ×2, C8 ×5, C18 ×2, C30 ×2; C31 sem teste por desenho; C32 cancelado). `git status --porcelain` limpo antes desta escrita.
