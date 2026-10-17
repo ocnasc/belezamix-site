@@ -1,6 +1,8 @@
 import { test, before } from "node:test";
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+import os from "node:os";
 import path from "node:path";
 import { COMPLETO, REAL, URL_PREVIA, ehInterno, gerar, meta, referencias, tags } from "./helpers.js";
 
@@ -56,18 +58,19 @@ test("C29 todo link interno aponta para um arquivo existente, nos dois modos", (
   }
 });
 
+test("C30 o CLI de build não aceita --saida", () => {
+  // hazard: se a opção voltar, o build apaga o caminho recebido; por isso o alvo é uma pasta temporária com sentinela, nunca a raiz
+  const dir = mkdtempSync(path.join(os.tmpdir(), "belezamix-saida-"));
+  const sentinela = path.join(dir, "sentinela.txt");
+  writeFileSync(sentinela, "não apagar");
+  const r = spawnSync(process.execPath, ["scripts/build.js", "--saida", dir], { encoding: "utf8" });
+  assert.notEqual(r.status, 0);
+  assert.match(r.stderr, /saida/);
+  assert.ok(existsSync(sentinela), "o build apagou a pasta passada em --saida");
+});
+
 test("C30 npm test roda o test runner nativo sobre tests/", () => {
   const pkg = JSON.parse(readFileSync("package.json", "utf8"));
   assert.equal(pkg.scripts.test, 'node --test "tests/**/*.test.js"');
 });
 
-test("C32 workflow anual: cron, disparo manual, secret e falha sem 2xx", () => {
-  const f = ".github/workflows/regeracao-anual.yml";
-  assert.ok(existsSync(f));
-  const y = readFileSync(f, "utf8");
-  assert.match(y, /- cron: "0 3 1 1 \*"/);
-  assert.match(y, /^\s*workflow_dispatch:/m);
-  assert.match(y, /\$\{\{ secrets\.CLOUDFLARE_DEPLOY_HOOK \}\}/);
-  assert.match(y, /-X POST "\$DEPLOY_HOOK"/);
-  assert.match(y, /case "\$codigo" in 2\?\?\) ;; \*\) exit 1 ;; esac/);
-});

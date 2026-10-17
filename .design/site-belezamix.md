@@ -69,7 +69,7 @@ A alternativa mais leve, um script de build em Node puro sem dependências, ganh
 | [Início](#início) | a página `/` | clear |
 | [Loja](#loja) | `/lojas/anhangabau/` e `/lojas/eloy-chaves/`, com schema por loja | open — 1 default taken |
 | [Páginas de apoio](#páginas-de-apoio) | `/marcas/`, `/profissionais/`, `/como-comprar/`, geradas só com dado | open — 2 defaults taken |
-| [Publicação](#publicação) | a prévia no Cloudflare Pages; depois, o lançamento no domínio, com sitemap, Search Console e regeração anual | open — 1 default taken |
+| [Publicação](#publicação) | a prévia no Cloudflare Pages; depois, o lançamento no domínio, com sitemap e Search Console | open — 1 default taken |
 
 Order: Conteúdo → Visual → Início → Loja → Publicação (prévia) → Páginas de apoio → Publicação (lançamento, quando os obrigatórios e o domínio existirem).
 
@@ -206,7 +206,6 @@ Open, default taken:
 | robô de busca na prévia | recebe a instrução de não indexar |
 | build de lançamento com obrigatório pendente | é recusado (Key decision 3) |
 | lançamento | site no `belezamixjundiai.com.br` com HTTPS, indexável, com página canônica no domínio e `sitemap.xml` listando exatamente as páginas geradas |
-| 1º de janeiro | um agendamento dispara um novo build, e o "Há N anos" passa a mostrar o ano novo |
 | depois do lançamento | Otávio cadastra o domínio no Search Console e envia o sitemap |
 
 Open, default taken:
@@ -221,7 +220,6 @@ Alternatives considered: GitHub Pages - grátis e já ligado ao repositório, ma
 - Eleventy 3.1.7 (versão estável no npm em 2026-10-17).
 - [GitHub Pages limits](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits) - não pode ser usado como hospedagem gratuita para negócio.
 - [Cloudflare Pages redirects](https://developers.cloudflare.com/pages/configuration/redirects/) - 301 por arquivo `_redirects`.
-- [Cloudflare Pages deploy hooks](https://developers.cloudflare.com/pages/configuration/deploy-hooks/) - build disparado por POST; o agendamento precisa de um disparador externo.
 - [Google Maps URLs](https://developers.google.com/maps/documentation/urls/get-started) - `query` obrigatório, `query_place_id` opcional e prioritário.
 - [RDAP Registro.br](https://rdap.registro.br/) - `belezamix.com.br` registrado desde 2019-01-16; `belezamixjundiai.com.br` livre em 2026-10-17.
 - `conteudo/logo-belezamix.png` - logo fornecido pelo Otávio; cores e contraste medidos a partir dele.

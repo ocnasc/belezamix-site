@@ -10,7 +10,7 @@ Quem procura em Jundiaí uma loja de cosméticos perto de casa não encontra um 
 
 Com esta task entregue, a Belezamix passa a ter um site estático com 6 páginas gerado a partir de um único arquivo de conteúdo. A prévia fica publicada no Cloudflare Pages a cada push. Cada loja tem botão de WhatsApp com mensagem pré-preenchida própria e um "Como chegar" que abre o perfil dela no Google Maps. O build de lançamento recusa publicar enquanto faltar dado obrigatório. Design: [.design/site-belezamix.md](../.design/site-belezamix.md).
 
-31 critérios em 6 slices · 6 one-way doors · 9 em aberto, dos quais 2 bloqueiam e 3 bloqueiam o go-live
+31 critérios em 6 slices (1 cancelado) · 6 one-way doors · 8 em aberto, dos quais 1 bloqueia e 3 bloqueiam o go-live
 
 ## Criteria
 
@@ -88,7 +88,7 @@ Com esta task entregue, a Belezamix passa a ter um site estático com 6 páginas
 25. Sempre, nos dois modos, todo link interno de toda página aponta para um arquivo que existe na saída do build.
 26. Quando `npm test` roda, ele executa com o test runner nativo do Node os checks dos critérios 1 a 25 e 31 e termina com código 0 só se todos passarem.
 27. Quando há push na branch `main`, o Cloudflare Pages roda `npm run test:ci` antes do build da prévia e publica o resultado em `https://<projeto>.pages.dev`. Se os testes falharem, o deploy falha e a versão anterior continua no ar. O `test:ci` roda os mesmos testes do `npm test`, menos os 3 de navegador (critérios 8, 13 e 30), porque o build do Cloudflare não tem o Edge. Renegociado durante a implementação e aprovado pelo Otávio em 2026-10-17 ("OK no critério 27").
-28. Um workflow do GitHub Actions agendado para `0 3 1 1 *` (00:00 de 1º de janeiro no horário de Brasília), e que também pode ser disparado manualmente, faz um POST no deploy hook do Cloudflare guardado no secret `CLOUDFLARE_DEPLOY_HOOK`. Quando ele roda, um novo build da `main` começa no Cloudflare. Se o POST não receber resposta 2xx, o workflow termina com falha.
+28. Cancelado pelo Otávio em 2026-10-17 ("não precisa de lógica para atualizar a idade"): não há regeração anual automática. O "Há N anos" é calculado a cada build a partir de `anoFundacao`.
 
 ### Visual: a identidade aprovada em todas as páginas
 
@@ -106,12 +106,12 @@ Com esta task entregue, a Belezamix passa a ter um site estático com 6 páginas
 
 ## Out of scope
 
-- Mapa embutido na página da loja - depende de uma chave da Maps Embed API que ainda não existe. Sem chave, o design manda omitir a seção (Unresolved 6).
+- Mapa embutido na página da loja - depende de uma chave da Maps Embed API que ainda não existe. Sem chave, o design manda omitir a seção (Unresolved 5).
 - Página por marca - o design só a admite se o Search Console mostrar busca por "<marca> Jundiaí" depois do lançamento.
 - Indicador de "aberto agora" - descartado no design: exigiria JavaScript e o horário fixo já responde à pergunta.
 - Analytics, cookies e banner - Key decision 6 do design.
 - GitHub Pages - os termos dele proíbem o uso como hospedagem gratuita de negócio.
-- Registro do domínio, DNS e Search Console - são ações do Otávio fora do repositório (Unresolved 4).
+- Registro do domínio, DNS e Search Console - são ações do Otávio fora do repositório (Unresolved 3).
 - Conversão de imagens para WebP no build - as fotos entram já em WebP (design, slice Conteúdo, default 2).
 
 ## Observable
@@ -122,7 +122,7 @@ Com esta task entregue, a Belezamix passa a ter um site estático com 6 páginas
 | tela `/` | carregando | n/a - HTML estático, não há carregamento assíncrono de conteúdo |
 | tela `/` | erro | n/a - não há operação que falhe no navegador; links de saída abrem apps externos |
 | tela `/` | não autorizado | n/a - site público, sem login |
-| tela `/` | densidade e ordem | 8, 13; ordem das lojas = ordem do arquivo de conteúdo (Unresolved 8) |
+| tela `/` | densidade e ordem | 8, 13; ordem das lojas = ordem do arquivo de conteúdo (Unresolved 7) |
 | tela `/` | ação destrutiva confirma | n/a - não há ação destrutiva |
 | tela `/` | layout, cores e tipografia | 8, 29, 30, 31 |
 | telas `/lojas/<slug>/` | estado vazio | 3, 6, 17 |
@@ -130,32 +130,31 @@ Com esta task entregue, a Belezamix passa a ter um site estático com 6 páginas
 | telas `/lojas/<slug>/` | densidade e ordem | 13, 14 |
 | telas de apoio | estado vazio | 18 |
 | telas de apoio | densidade e ordem | 19, 20, 21 |
-| URL inexistente | página de erro 404 | Unresolved 7 |
+| URL inexistente | página de erro 404 | Unresolved 6 |
 | comando de build | modo default | 23 |
 | comando de build | códigos de saída | 3, 4, 5 |
 | comando de build | o que imprime ao falhar | 4, 5 |
 | comando de build | falha no meio | 4 |
 | comando `npm test` | saída e código | 26 |
 | deploy no Cloudflare | falha | 27 |
-| workflow agendado | falha | 28 |
 | texto das páginas | tom e afirmações | existing - `objetivo.md`, "O site NÃO deve ter" (sem superlativos, depoimentos ou números sem fonte); revisado no diff |
 | texto das páginas | o que o leitor faz a seguir | 8, 10, 11, 22 |
-| coleção `Loja` | ordem | Unresolved 8 |
+| coleção `Loja` | ordem | Unresolved 7 |
 | coleção `Categoria`/marcas | agrupamento e ordem | 19 |
-| coleção `Categoria`/marcas | duplicatas | Unresolved 8 |
+| coleção `Categoria`/marcas | duplicatas | Unresolved 7 |
 | link compartilhado (card de prévia) | título, descrição, imagem | 12 |
 
 ## Swept
 
 - validation: 4, 5
-- failure modes: 4, 27, 28
+- failure modes: 4, 27
 - idempotency and retry: n/a - o build é uma função do conteúdo e do ano corrente; rodar de novo com as mesmas entradas gera a mesma saída, e um deploy repetido republica o mesmo site
-- authorization: existing - só quem tem permissão de push no repositório `ocnasc/belezamix-site` dispara a publicação; o deploy hook fica num secret do repositório; o site é público e sem login
-- concurrency and ordering: Unresolved 9 - a documentação do Cloudflare Pages não diz em que ordem builds na fila são processados
+- authorization: existing - só quem tem permissão de push no repositório `ocnasc/belezamix-site` dispara a publicação; o site é público e sem login
+- concurrency and ordering: Unresolved 8 - a documentação do Cloudflare Pages não diz em que ordem builds na fila são processados
 - data lifecycle: 18. Quando um dado sai do conteúdo, a página ou seção dele some no próximo deploy. Remover uma URL depois do lançamento é tratado pela Key decision 5 do design
-- external-dependency failure: 27, 28 - falha do Cloudflare mantém a versão anterior no ar; falha do deploy hook aparece como workflow falho. WhatsApp e Google Maps são só links de saída; n/a. Fontes e ícones saem do próprio site (31)
+- external-dependency failure: 27 - falha do Cloudflare mantém a versão anterior no ar. WhatsApp e Google Maps são só links de saída; n/a. Fontes e ícones saem do próprio site (31)
 - state transitions: 3, 4, 23, 24 - prévia e lançamento são modos de build, não estados persistidos
-- observability: n/a em tempo de execução - por decisão do design (Key decision 6), não há analytics. A medição é a mensagem pré-preenchida (10); logs de build ficam no Cloudflare, e os do workflow anual no GitHub Actions
+- observability: n/a em tempo de execução - por decisão do design (Key decision 6), não há analytics. A medição é a mensagem pré-preenchida (10); logs de build ficam no Cloudflare
 
 ## Impact
 
@@ -166,7 +165,7 @@ Com esta task entregue, a Belezamix passa a ter um site estático com 6 páginas
 | domain | novo termo: `Categoria` - grupo de marcas (Unhas, Cabelo, Maquiagem, Linha profissional), com marcação `profissional`, no arquivo de conteúdo |
 | domain | novo termo: modo `prévia` / `lançamento` - o modo do build; prévia é o default |
 | stored data | nada a migrar - não existe site nem conteúdo anterior |
-| repositório | primeiro código do projeto: entram `package.json` (dependência `@11ty/eleventy`) e o workflow agendado; `objetivo.md`, `README.md` e `.design/` não mudam |
+| repositório | primeiro código do projeto: entram `package.json` (dependência `@11ty/eleventy`) ; `objetivo.md`, `README.md` e `.design/` não mudam |
 
 ## Decided
 
@@ -186,7 +185,6 @@ Com esta task entregue, a Belezamix passa a ter um site estático com 6 páginas
 - Revisão do plano colada pelo Otávio no chat em 2026-10-17, aprovada por ele ("A sim, B sim, aplica tudo") - Place IDs: "Anhangabaú: `ChIJ3wjOYpAmz5QRd_NY4r1x-mo`", "Eloy Chaves: `ChIJoygNBBklz5QRUl-scTsYM3g`".
 - [conteudo/logo-belezamix.png](../conteudo/logo-belezamix.png) - imagem da marca para `og:image` e cabeçalho até existir a versão vetorial.
 - [Google Maps URLs](https://developers.google.com/maps/documentation/urls/get-started) - formato do critério 11.
-- [Cloudflare Pages deploy hooks](https://developers.cloudflare.com/pages/configuration/deploy-hooks/) - critério 28.
 - [.design/visual/inicio.html](../.design/visual/inicio.html) - **binding para a interface**: tela Início (360×640 e desktop), aprovada pelo Otávio em 2026-10-17. Valores transcritos nos critérios 8, 10, 29 e 30; as demais páginas seguem os mesmos tokens e componentes.
 
 This task is the record of decision. If a linked document diverges, ask before building.
@@ -195,12 +193,11 @@ This task is the record of decision. If a linked document diverges, ask before b
 
 | # | Kind | Question | Until answered |
 |---|---|---|---|
-| 1 | blocks | Conta no Cloudflare e projeto Pages conectado ao repositório, com o comando de build rodando `npm test` antes do build. Nome do projeto: default `belezamix-site`, ou seja `belezamix-site.pages.dev` se o nome estiver livre. Também falta o OK do Otávio para o push. | O critério 27 não pode ser provado. |
-| 2 | blocks | Deploy hook criado no Cloudflare e salvo como secret `CLOUDFLARE_DEPLOY_HOOK` no repositório, pelo Otávio. | O critério 28 só pode ser provado até o ponto do POST. |
-| 3 | blocks go-live | Dados das lojas vindos dos donos: `telefone`, `whatsapp`, `latitude`/`longitude` e `fotoFachada` de cada loja, e `anoFundacao` da marca. | Todos os critérios passam com dados de teste, mas o build de lançamento recusa o conteúdo real (critério 4). |
-| 4 | blocks go-live | Registro de `belezamixjundiai.com.br` (livre em 2026-10-17), domínio ligado ao projeto no Cloudflare Pages, e cadastro no Search Console com envio do sitemap. | O lançamento não pode ir ao ar no domínio. |
-| 5 | blocks go-live | Conferência manual de nome, endereço e telefone contra o Perfil do Google e o Instagram (Key decision 4 do design), e teste de clique confirmando que os dois Place IDs abrem o perfil da loja certa. | Lançar sem conferir arrisca divergência entre site, Perfil e Instagram, ou um "Como chegar" apontando para outro lugar. |
-| 6 | open | Chave da Maps Embed API para o mapa nas páginas de loja. | Mapa fora desta task; as páginas de loja não têm a seção de mapa. |
-| 7 | open | Página 404 própria. | Fica a 404 padrão do Cloudflare Pages. |
-| 8 | open | Ordem das lojas e tratamento de marca duplicada numa categoria. | Default: a ordem do arquivo de conteúdo, sem deduplicar; o Otávio corrige duplicatas no JSON. |
-| 9 | open | Ordem de processamento de builds na fila do Cloudflare Pages com dois pushes próximos. | Não está documentada. Default: se a produção não corresponder ao último commit, refazer o deploy pelo painel. |
+| 1 | blocks | Conta no Cloudflare e projeto Pages conectado ao repositório, com o comando de build `npm run test:ci && npm run build` (critério 27). Nome do projeto: default `belezamix-site`, ou seja `belezamix-site.pages.dev` se o nome estiver livre. Também falta o OK do Otávio para o push. | O critério 27 não pode ser provado. |
+| 2 | blocks go-live | Dados das lojas vindos dos donos: `telefone`, `whatsapp`, `latitude`/`longitude` e `fotoFachada` de cada loja, e `anoFundacao` da marca. | Todos os critérios passam com dados de teste, mas o build de lançamento recusa o conteúdo real (critério 4). |
+| 3 | blocks go-live | Registro de `belezamixjundiai.com.br` (livre em 2026-10-17), domínio ligado ao projeto no Cloudflare Pages, e cadastro no Search Console com envio do sitemap. | O lançamento não pode ir ao ar no domínio. |
+| 4 | blocks go-live | Conferência manual de nome, endereço e telefone contra o Perfil do Google e o Instagram (Key decision 4 do design), e teste de clique confirmando que os dois Place IDs abrem o perfil da loja certa. | Lançar sem conferir arrisca divergência entre site, Perfil e Instagram, ou um "Como chegar" apontando para outro lugar. |
+| 5 | open | Chave da Maps Embed API para o mapa nas páginas de loja. | Mapa fora desta task; as páginas de loja não têm a seção de mapa. |
+| 6 | open | Página 404 própria. | Fica a 404 padrão do Cloudflare Pages. |
+| 7 | open | Ordem das lojas e tratamento de marca duplicada numa categoria. | Default: a ordem do arquivo de conteúdo, sem deduplicar; o Otávio corrige duplicatas no JSON. |
+| 8 | open | Ordem de processamento de builds na fila do Cloudflare Pages com dois pushes próximos. | Não está documentada. Default: se a produção não corresponder ao último commit, refazer o deploy pelo painel. |

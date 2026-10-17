@@ -128,6 +128,26 @@ for (const modo of ["previa", "lancamento"]) {
   });
 }
 
+for (const modo of ["previa", "lancamento"]) {
+  test(`C8 foto com nome repetido na mesma loja recusa o build (${modo})`, async () => {
+    const c = clonar(COMPLETO);
+    c.lojas[0].fotos[0].arquivo = "tests/fixtures/outra/fachada-teste.webp";
+    const r = await gerar(c, { modo });
+    assert.notEqual(r.codigo, 0);
+    assert.ok(
+      r.linhas.some((l) => l.startsWith("Belezamix (Anhangabaú): fotos[0] inválido") && l.includes("nome repetido")),
+      r.linhas.join("\n"),
+    );
+  });
+}
+
+test("C8 lojas diferentes podem usar fotos com o mesmo nome", async () => {
+  const r = await gerar(COMPLETO);
+  assert.equal(r.codigo, 0, r.linhas.join("\n"));
+  assert.ok(r.existe("/fotos/anhangabau/fachada-teste.webp"));
+  assert.ok(r.existe("/fotos/eloy-chaves/fachada-teste.webp"));
+});
+
 test("C9 opcional ausente não gera seção nem [PENDENTE", async () => {
   const c = clonar(COMPLETO);
   for (const campo of ["listaVip", "formasPagamento", "retirada", "entrega", "categorias"]) delete c.negocio[campo];

@@ -5,7 +5,6 @@ const { values } = parseArgs({
   options: {
     lancamento: { type: "boolean", default: false },
     conteudo: { type: "string" },
-    saida: { type: "string" },
   },
 });
 
@@ -13,7 +12,6 @@ const modo = values.lancamento ? "lancamento" : "previa";
 const { codigo, linhas } = await build({
   modo,
   ...(values.conteudo ? { conteudo: values.conteudo } : {}),
-  ...(values.saida ? { saida: values.saida } : {}),
 });
 
 if (codigo !== 0) {

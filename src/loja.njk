@@ -6,12 +6,8 @@ pagination:
   alias: loja
   addAllPagesToCollections: true
 permalink: "{{ loja.url }}"
-eleventyComputed:
-  titulo: "Cosméticos em {{ loja.bairro }}, Jundiaí | Belezamix"
-  h1: "{{ loja.nome }}"
-  descricao: "{{ loja.nome }}: {{ loja.enderecoCompleto }}. Chame no WhatsApp ou veja como chegar."
-  jsonld: "{{ loja.jsonld | safe }}"
 ---
+{% from "cartao-loja.njk" import acoesLoja %}
 <div class="pagina">
   <section class="loja loja--detalhe" aria-label="Endereço e contato">
     {% if loja.fachada %}
@@ -22,13 +18,7 @@ eleventyComputed:
     <p class="loja__endereco">{{ loja.enderecoCompleto }}</p>
     <ul class="loja__horarios">{% for h in loja.horarios %}<li>{{ h }}</li>{% endfor %}</ul>
     <p class="loja__telefone">{{ loja.telefoneExibido }}</p>
-    {% if loja.whatsappHref %}
-    <a class="btn-whats" href="{{ loja.whatsappHref }}" aria-label="Chamar no WhatsApp da loja {{ loja.nomeCurto }}"><span class="icone icone--whats" aria-hidden="true"></span>Chamar no WhatsApp</a>
-    {% else %}
-    <span class="btn-whats btn-whats--pendente"><span class="icone icone--whats" aria-hidden="true"></span>Chamar no WhatsApp</span>
-    <p class="pendente">{{ loja.whatsappPendente }}</p>
-    {% endif %}
-    <a class="link-mapa" href="{{ loja.mapaHref }}"><span class="icone icone--pin" aria-hidden="true"></span>Como chegar</a>
+    {{ acoesLoja(loja) }}
   </section>
   {% if loja.fotos.length %}
   <section class="galeria" aria-label="Fotos da loja">

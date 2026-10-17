@@ -56,7 +56,7 @@
       "telefone": "551145210000",
       "whatsapp": "5511988880000",
       "mensagemWhatsapp": "Olá! Vim pelo site, loja Eloy Chaves",
-      "fotoFachada": { "arquivo": "tests/fixtures/fachada-teste.webp", "alt": "Fachada de teste da loja Eloy Chaves" }
+      "fotoFachada": { "arquivo": "tests/fixtures/outra/fachada-teste.webp", "alt": "Fachada de teste da loja Eloy Chaves" }
     }
   ]
 }
