@@ -23,3 +23,6 @@ HANDOFF.md
 
 # Saída do build
 _site/
+
+# Originais das fotos (JPG com EXIF); o site usa as WebP de conteudo/fotos/
+/fotos/

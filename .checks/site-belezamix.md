@@ -43,7 +43,7 @@ Todo proof roda com `node --test --test-name-pattern="^Cn " "tests/**/*.test.js"
 **C1** - Nenhum template contém os endereços, horários, Instagram ou Place IDs (critério 1)
 Proof: teste C1
 
-**C2** - `conteudo/conteudo.json` traz exatamente os campos informados pelas fontes e deixa ausentes os 12 listados (critério 2)
+**C2** - `conteudo/conteudo.json` mantém os endereços, horários, Place IDs, nome e Instagram vindos das fontes (critério 2). O estado de criação, com os 12 campos ausentes, fica registrado em `tests/fixtures/minimo.json`, que C3, C5 e C12 usam. Renegociado com o Otávio em 2026-10-17, quando o conteúdo real foi preenchido ("pode ... corrigir os testes").
 Proof: teste C2
 
 **C3** - Em prévia, um obrigatório ausente sai com código 0 e a página mostra `[PENDENTE: <campo> da loja <nome>]` (Loja) e `[PENDENTE: <campo>]` (Negócio) (critério 3)

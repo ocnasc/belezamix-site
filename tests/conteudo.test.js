@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { OBRIGATORIOS_LOJA, OBRIGATORIOS_NEGOCIO, formatarTelefone } from "../lib/conteudo.js";
-import { COMPLETO, REAL, clonar, gerar, listarHtml, texto, trecho } from "./helpers.js";
+import { COMPLETO, MINIMO, REAL, clonar, gerar, listarHtml, texto, trecho } from "./helpers.js";
 
 test("C1 nenhum template contém endereço, horário, Instagram ou Place ID", () => {
   const fatos = [
@@ -19,8 +19,8 @@ test("C1 nenhum template contém endereço, horário, Instagram ou Place ID", ()
   }
 });
 
-test("C2 conteudo.json traz só o que as fontes informam", () => {
-  assert.deepEqual(REAL.negocio, { nome: "Belezamix", instagram: "belezamixjundiai" });
+test("C2 conteudo.json mantém os dados das lojas que vêm do objetivo.md", () => {
+  assert.deepEqual([REAL.negocio.nome, REAL.negocio.instagram], ["Belezamix", "belezamixjundiai"]);
   const [a, e] = REAL.lojas;
   assert.deepEqual(
     [a.slug, a.nome, a.bairro, a.logradouro, a.numero, a.cep, a.cidade, a.uf, a.placeId],
@@ -38,18 +38,12 @@ test("C2 conteudo.json traz só o que as fontes informam", () => {
     { dias: ["seg", "ter", "qua", "qui", "sex"], abre: "08:00", fecha: "19:00" },
     { dias: ["sab"], abre: "09:00", fecha: "12:00" },
   ]);
-  const ausentesLoja = ["telefone", "whatsapp", "latitude", "longitude", "fotoFachada", "fotos"];
-  const ausentesNegocio = ["anoFundacao", "categorias", "formasPagamento", "retirada", "entrega", "listaVip"];
-  for (const loja of REAL.lojas) for (const c of ausentesLoja) assert.ok(!(c in loja), `${loja.slug}.${c} deveria estar ausente`);
-  for (const c of ausentesNegocio) assert.ok(!(c in REAL.negocio), `negocio.${c} deveria estar ausente`);
-  const chavesLoja = ["slug", "nome", "nomeCurto", "bairro", "logradouro", "numero", "cep", "cidade", "uf", "placeId", "horarios", "mensagemWhatsapp"];
-  for (const loja of REAL.lojas) assert.deepEqual(Object.keys(loja).sort(), [...chavesLoja].sort(), loja.slug);
   assert.deepEqual([a.nomeCurto, a.mensagemWhatsapp], ["Anhangabaú", "Olá! Vim pelo site, loja Anhangabaú"]);
   assert.deepEqual([e.nomeCurto, e.mensagemWhatsapp], ["Eloy Chaves", "Olá! Vim pelo site, loja Eloy Chaves"]);
 });
 
 test("C3 prévia com obrigatório ausente sai com 0 e mostra [PENDENTE]", async () => {
-  const r = await gerar(REAL);
+  const r = await gerar(MINIMO);
   assert.equal(r.codigo, 0);
   const inicio = r.html("/");
   assert.ok(inicio.includes("[PENDENTE: whatsapp da loja Belezamix Eloy Chaves]"));
@@ -81,7 +75,7 @@ test("C4 lançamento recusa cada obrigatório ausente com a linha <nome>: <campo
 });
 
 test("C5 lançamento recusado não escreve nenhum .html", async () => {
-  const r = await gerar(REAL, { modo: "lancamento" });
+  const r = await gerar(MINIMO, { modo: "lancamento" });
   assert.notEqual(r.codigo, 0);
   assert.deepEqual(listarHtml(r.saida), []);
 });

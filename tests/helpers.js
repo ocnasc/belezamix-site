@@ -8,6 +8,8 @@ export const AGORA = new Date("2026-06-01T12:00:00-03:00");
 export const URL_PREVIA = "https://previa.teste";
 export const COMPLETO = JSON.parse(readFileSync("tests/fixtures/completo.json", "utf8"));
 export const REAL = JSON.parse(readFileSync("conteudo/conteudo.json", "utf8"));
+// why: os checks de [PENDENTE] e de recusa precisam de conteúdo incompleto, e o conteudo.json real não pode ficar preso nesse estado
+export const MINIMO = JSON.parse(readFileSync("tests/fixtures/minimo.json", "utf8"));
 
 export const clonar = (o) => structuredClone(o);
 
