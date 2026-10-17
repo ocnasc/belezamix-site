@@ -1,0 +1,62 @@
+{
+  "negocio": {
+    "nome": "Belezamix",
+    "anoFundacao": 2006,
+    "instagram": "belezamixjundiai",
+    "listaVip": "https://chat.whatsapp.com/TESTE",
+    "formasPagamento": ["Pagamento Teste 1", "Pagamento Teste 2"],
+    "retirada": "Texto de retirada de teste.",
+    "categorias": [
+      { "nome": "Unhas", "marcas": ["Marca Teste A", "Marca Teste B"], "profissional": false },
+      { "nome": "Cabelo", "marcas": ["Marca Teste C"], "profissional": false },
+      { "nome": "Linha profissional", "marcas": ["Marca Teste D"], "profissional": true }
+    ]
+  },
+  "lojas": [
+    {
+      "slug": "anhangabau",
+      "nome": "Belezamix (Anhangabaú)",
+      "nomeCurto": "Anhangabaú",
+      "bairro": "Anhangabaú",
+      "logradouro": "Av. Jundiaí",
+      "numero": "376",
+      "cep": "13208-051",
+      "cidade": "Jundiaí",
+      "uf": "SP",
+      "latitude": -23.1,
+      "longitude": -46.8,
+      "placeId": "ChIJ3wjOYpAmz5QRd_NY4r1x-mo",
+      "horarios": [
+        { "dias": ["seg", "ter", "qua", "qui", "sex"], "abre": "08:00", "fecha": "17:00" },
+        { "dias": ["sab"], "abre": "08:00", "fecha": "12:00" }
+      ],
+      "telefone": "5511999990000",
+      "whatsapp": "5511999990000",
+      "mensagemWhatsapp": "Olá! Vim pelo site, loja Anhangabaú",
+      "fotoFachada": { "arquivo": "tests/fixtures/fachada-teste.webp", "alt": "Fachada de teste da loja Anhangabaú" },
+      "fotos": [{ "arquivo": "tests/fixtures/interior-teste.webp", "alt": "Interior de teste" }]
+    },
+    {
+      "slug": "eloy-chaves",
+      "nome": "Belezamix Eloy Chaves",
+      "nomeCurto": "Eloy Chaves",
+      "bairro": "Parque Eloy Chaves",
+      "logradouro": "Av. Benedicto Castilho de Andrade",
+      "numero": "558",
+      "cep": "13212-070",
+      "cidade": "Jundiaí",
+      "uf": "SP",
+      "latitude": -23.2,
+      "longitude": -46.9,
+      "placeId": "ChIJoygNBBklz5QRUl-scTsYM3g",
+      "horarios": [
+        { "dias": ["seg", "ter", "qua", "qui", "sex"], "abre": "08:00", "fecha": "19:00" },
+        { "dias": ["sab"], "abre": "09:00", "fecha": "12:00" }
+      ],
+      "telefone": "551145210000",
+      "whatsapp": "5511988880000",
+      "mensagemWhatsapp": "Olá! Vim pelo site, loja Eloy Chaves",
+      "fotoFachada": { "arquivo": "tests/fixtures/fachada-teste.webp", "alt": "Fachada de teste da loja Eloy Chaves" }
+    }
+  ]
+}
