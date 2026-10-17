@@ -87,7 +87,7 @@ Com esta task entregue, a Belezamix passa a ter um site estático com 6 páginas
     - é gerado um `sitemap.xml` listando exatamente essas URLs canônicas, nem mais nem menos.
 25. Sempre, nos dois modos, todo link interno de toda página aponta para um arquivo que existe na saída do build.
 26. Quando `npm test` roda, ele executa com o test runner nativo do Node os checks dos critérios 1 a 25 e 31 e termina com código 0 só se todos passarem.
-27. Quando há push na branch `main`, o Cloudflare Pages roda `npm test` antes do build da prévia e publica o resultado em `https://<projeto>.pages.dev`. Se `npm test` falhar, o deploy falha e a versão anterior continua no ar.
+27. Quando há push na branch `main`, o Cloudflare Pages roda `npm run test:ci` antes do build da prévia e publica o resultado em `https://<projeto>.pages.dev`. Se os testes falharem, o deploy falha e a versão anterior continua no ar. O `test:ci` roda os mesmos testes do `npm test`, menos os 3 de navegador (critérios 8, 13 e 30), porque o build do Cloudflare não tem o Edge. Renegociado durante a implementação e aprovado pelo Otávio em 2026-10-17 ("OK no critério 27").
 28. Um workflow do GitHub Actions agendado para `0 3 1 1 *` (00:00 de 1º de janeiro no horário de Brasília), e que também pode ser disparado manualmente, faz um POST no deploy hook do Cloudflare guardado no secret `CLOUDFLARE_DEPLOY_HOOK`. Quando ele roda, um novo build da `main` começa no Cloudflare. Se o POST não receber resposta 2xx, o workflow termina com falha.
 
 ### Visual: a identidade aprovada em todas as páginas

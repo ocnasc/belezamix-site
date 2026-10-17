@@ -31,7 +31,7 @@ Repositório sem código: tudo é novo. Fontes e ícones vêm de pacotes npm cop
 
 - Nada mais nesta mudança é difícil de reverter.
 
-**Renegociação pendente de OK do Otávio** (critérios 26 e 27): os checks visuais (C11, C17, C34) precisam de navegador. `npm test` roda todos eles localmente, o que mantém o critério 26 literal. O build do Cloudflare não tem Edge, então ele roda `npm run test:ci`: os mesmos testes, menos os visuais. Isso muda o critério 27, que já está bloqueado pela configuração do Cloudflare.
+**Renegociação aprovada pelo Otávio em 2026-10-17** ("OK no critério 27"; critérios 26 e 27): os checks visuais (C11, C17, C34) precisam de navegador. `npm test` roda todos eles localmente, o que mantém o critério 26 literal. O build do Cloudflare não tem Edge, então ele roda `npm run test:ci`: os mesmos testes, menos os visuais. O critério 27 da task foi atualizado; C31 continua bloqueado pela configuração do Cloudflare.
 
 ## Checks
 
