@@ -13,8 +13,9 @@ Sources:
 
 ## Out of scope
 
-- Mapa embutido, página por marca, "aberto agora", analytics, 404 própria, conversão para WebP - excluídos na task (Out of scope e Unresolved 6 e 7).
-- Configurar o Cloudflare Pages, criar o deploy hook, `git push` - ações do Otávio ou que exigem o OK dele (task, Unresolved 1 e 2; rule 6).
+- Mapa embutido, página por marca, "aberto agora", analytics, 404 própria, conversão para WebP - excluídos na task (Out of scope e Unresolved 5 e 6).
+- Configurar o Cloudflare Pages, `git push` - ações do Otávio ou que exigem o OK dele (task, Unresolved 1; rule 6).
+- Regeração anual do "Há N anos" - critério 28 cancelado pelo Otávio em 2026-10-17 ("não precisa de lógica para atualizar a idade").
 
 ## Landing
 
@@ -140,8 +141,8 @@ Proof: `npm test` (exit 0) e teste C30, que confere o script `test` do `package.
 **C31** - O Cloudflare roda os testes antes do build e não publica se falharem (critério 27)
 Proof: bloqueado - task Unresolved 1; e a renegociação acima
 
-**C32** - O workflow anual tem cron `0 3 1 1 *`, `workflow_dispatch`, usa o secret `CLOUDFLARE_DEPLOY_HOOK` e falha sem resposta 2xx (critério 28)
-Proof: teste C32 (estático); a execução real fica bloqueada pela task, Unresolved 2
+**C32** - Cancelado com o critério 28 (ver Out of scope)
+Proof: nenhuma - check removido
 
 ### S6 - Visual · 2 arquivos · ~4k
 
@@ -157,12 +158,12 @@ Proof: teste C35
 ## Swept
 
 - validation: C4, C6, C7, C8
-- failure modes: C4, C5, C31, C32
+- failure modes: C4, C5, C31
 - idempotency: não se aplica - o build é função do conteúdo e do ano
 - authorization: existing - permissão de push no GitHub; secret do repositório
-- concurrency: fora do escopo - task Unresolved 9
+- concurrency: fora do escopo - task Unresolved 8
 - data lifecycle: C22
-- dependency failure: C31, C32; fontes e ícones locais (C35)
+- dependency failure: C31; fontes e ícones locais (C35)
 - state transitions: C3, C4, C27, C28
 - observability: fora do escopo - Key decision 6 (sem analytics)
 
