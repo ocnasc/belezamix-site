@@ -1,6 +1,6 @@
 import { test, before } from "node:test";
 import assert from "node:assert/strict";
-import { COMPLETO, REAL, URL_PREVIA, clonar, gerar, meta, tags, texto, trecho } from "./helpers.js";
+import { COMPLETO, MINIMO, URL_PREVIA, clonar, gerar, meta, tags, texto, trecho } from "./helpers.js";
 
 let completo;
 before(async () => {
@@ -18,7 +18,7 @@ test("C12 selo de anos só na Início, calculado ou [PENDENTE]", async () => {
     assert.ok(!/Há .{0,40} anos/.test(texto(completo.html(url))), url);
   }
   assert.ok(!/Há .{0,40} anos/.test(texto(trecho(completo.html("/"), "footer"))));
-  const real = await gerar(REAL);
+  const real = await gerar(MINIMO);
   assert.ok(texto(trecho(real.html("/"), "header")).includes("Há [PENDENTE: anoFundacao] anos em Jundiaí"));
 });
 

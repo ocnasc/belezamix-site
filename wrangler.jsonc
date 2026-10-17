@@ -1,0 +1,9 @@
+// why: sem este arquivo o Cloudflare gerava uma configuração a cada deploy da main, e o deploy de prévia dos PRs (`wrangler preview`) falhava por falta do bloco `previews`
+{
+  "name": "belezamix-site",
+  "compatibility_date": "2026-10-12",
+  "assets": {
+    "directory": "./_site"
+  },
+  "previews": {}
+}

@@ -1,0 +1,42 @@
+{
+  "negocio": {
+    "nome": "Belezamix",
+    "instagram": "belezamixjundiai"
+  },
+  "lojas": [
+    {
+      "slug": "anhangabau",
+      "nome": "Belezamix (Anhangabaú)",
+      "nomeCurto": "Anhangabaú",
+      "bairro": "Anhangabaú",
+      "logradouro": "Av. Jundiaí",
+      "numero": "376",
+      "cep": "13208-051",
+      "cidade": "Jundiaí",
+      "uf": "SP",
+      "placeId": "ChIJ3wjOYpAmz5QRd_NY4r1x-mo",
+      "horarios": [
+        { "dias": ["seg", "ter", "qua", "qui", "sex"], "abre": "08:00", "fecha": "17:00" },
+        { "dias": ["sab"], "abre": "08:00", "fecha": "12:00" }
+      ],
+      "mensagemWhatsapp": "Olá! Vim pelo site, loja Anhangabaú"
+    },
+    {
+      "slug": "eloy-chaves",
+      "nome": "Belezamix Eloy Chaves",
+      "nomeCurto": "Eloy Chaves",
+      "bairro": "Parque Eloy Chaves",
+      "logradouro": "Av. Benedicto Castilho de Andrade",
+      "numero": "558",
+      "cep": "13212-070",
+      "cidade": "Jundiaí",
+      "uf": "SP",
+      "placeId": "ChIJoygNBBklz5QRUl-scTsYM3g",
+      "horarios": [
+        { "dias": ["seg", "ter", "qua", "qui", "sex"], "abre": "08:00", "fecha": "19:00" },
+        { "dias": ["sab"], "abre": "09:00", "fecha": "12:00" }
+      ],
+      "mensagemWhatsapp": "Olá! Vim pelo site, loja Eloy Chaves"
+    }
+  ]
+}
